@@ -6,6 +6,9 @@ A mobile-friendly gym progress tracker built as a private Progressive Web App.
 
 - Clean mobile-first interface with light cards, a focused next-workout action, and app-style bottom navigation
 - Persistent Light/Dark theme switch in the header and Settings
+- Live workout progress with elapsed time, completed-set checkboxes, and automatic unfinished-session recovery
+- Adjustable 2/3/4-minute rest timer with ±30-second controls and vibration when rest ends
+- Previous set values beside each input plus one-tap copying of the last matching workout
 - Monthly activity calendar that highlights completed workout days
 - English and Russian interface with an instant language switch in the header and a saved preference in Settings
 - Localized routines, muscle groups, exercise names, PR notes, dates, guidance, confirmations, and status messages
