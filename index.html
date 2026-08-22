@@ -50,6 +50,11 @@
       gap: 16px;
       margin-bottom: 18px;
     }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; }
+    .language-select {
+      width: auto; min-width: 64px; padding: 8px 10px;
+      border-radius: 999px; background: var(--panel); font-weight: 800;
+    }
     .brand { display: flex; align-items: center; gap: 12px; }
     .logo {
       width: 44px; height: 44px; border-radius: 14px;
@@ -261,22 +266,28 @@
         <div class="logo">RT</div>
         <div>
           <h1>RepTrack</h1>
-          <p>Private gym progress tracker</p>
+          <p data-i18n="appSubtitle">Private gym progress tracker</p>
         </div>
       </div>
-      <div class="pill">Data saved on this device</div>
+      <div class="topbar-actions">
+        <select id="quickLanguage" class="language-select" data-i18n-aria-label="language">
+          <option value="en">EN</option>
+          <option value="ru">RU</option>
+        </select>
+        <div class="pill" data-i18n="storage">Data saved on this device</div>
+      </div>
     </header>
 
     <section id="dashboardView" class="view active">
       <div class="hero">
         <div class="hero-grid">
           <div>
-            <div class="eyebrow" id="todayLabel">Today</div>
+            <div class="eyebrow" id="todayLabel"></div>
             <h2 id="todayWorkoutTitle">Ready to train?</h2>
             <p id="todayWorkoutText">Log your session, beat one small number, and leave with a clear record.</p>
           </div>
           <div class="hero-actions">
-            <button class="btn btn-primary" id="startTodayBtn">Start workout</button>
+            <button class="btn btn-primary" id="startTodayBtn" data-i18n="startWorkout">Start workout</button>
           </div>
         </div>
       </div>
@@ -284,301 +295,193 @@
       <div class="grid">
         <article class="card">
           <div class="metric" id="weekSessions">0</div>
-          <div class="metric-label">Sessions this week</div>
-          <div class="metric-change" id="weekSessionsHint">Start with one quality session</div>
+          <div class="metric-label" data-i18n="sessionsWeek">Sessions this week</div>
+          <div class="metric-change" id="weekSessionsHint" data-i18n="startQuality">Start with one quality session</div>
         </article>
         <article class="card">
           <div class="metric" id="weekVolume">0 kg</div>
-          <div class="metric-label">Weekly training volume</div>
-          <div class="metric-change" id="weekVolumeHint">Weight × reps across all sets</div>
+          <div class="metric-label" data-i18n="weeklyVolume">Weekly training volume</div>
+          <div class="metric-change" id="weekVolumeHint" data-i18n="volumeFormula">Weight × reps across all sets</div>
         </article>
         <article class="card">
           <div class="metric" id="totalPRs">0</div>
-          <div class="metric-label">Tracked personal records</div>
-          <div class="metric-change">Imported references + logged bests</div>
+          <div class="metric-label" data-i18n="trackedRecords">Tracked personal records</div>
+          <div class="metric-change" data-i18n="importedBests">Imported references + logged bests</div>
         </article>
       </div>
 
       <div class="section-head">
         <div>
-          <h2>Current training block</h2>
-          <p>Your hard, PR, and recovery calendar</p>
+          <h2 data-i18n="currentBlock">Current training block</h2>
+          <p data-i18n="calendarDesc">Your hard, PR, and recovery calendar</p>
         </div>
       </div>
       <div class="card full">
         <div class="plan-grid">
-          <div class="plan-stat"><small>Current phase</small><strong id="cyclePhase">—</strong><span class="muted" id="cycleDates">—</span></div>
-          <div class="plan-stat"><small>Next phase</small><strong id="nextCyclePhase">—</strong><span class="muted" id="nextCycleDates">—</span></div>
-          <div class="plan-stat"><small>Progression</small><strong>Upper +2.5 kg</strong><span class="muted">Lower +5 kg</span></div>
+          <div class="plan-stat"><small data-i18n="currentPhase">Current phase</small><strong id="cyclePhase">—</strong><span class="muted" id="cycleDates">—</span></div>
+          <div class="plan-stat"><small data-i18n="nextPhase">Next phase</small><strong id="nextCyclePhase">—</strong><span class="muted" id="nextCycleDates">—</span></div>
+          <div class="plan-stat"><small data-i18n="progression">Progression</small><strong data-i18n="upperProgression">Upper +2.5 kg</strong><span class="muted" data-i18n="lowerProgression">Lower +5 kg</span></div>
         </div>
-        <div class="notice" id="cycleGuidance" style="margin-top:10px">Loading the current training phase…</div>
+        <div class="notice" id="cycleGuidance" style="margin-top:10px" data-i18n="loadingPhase">Loading the current training phase…</div>
         <div class="rule-grid" id="trainingRules"></div>
       </div>
 
-      <div class="section-head">
-        <div>
-          <h2>Your weekly split</h2>
-          <p>Preloaded from your current routine</p>
-        </div>
-      </div>
+      <div class="section-head"><div><h2 data-i18n="weeklySplit">Your weekly split</h2><p data-i18n="splitDesc">Preloaded from your current routine</p></div></div>
       <div id="splitList" class="list"></div>
 
-      <div class="section-head">
-        <div>
-          <h2>Recent activity</h2>
-          <p>Your latest saved workouts</p>
-        </div>
-      </div>
+      <div class="section-head"><div><h2 data-i18n="recentActivity">Recent activity</h2><p data-i18n="recentDesc">Your latest saved workouts</p></div></div>
       <div id="recentList" class="list"></div>
     </section>
 
     <section id="logView" class="view">
-      <div class="section-head">
-        <div>
-          <h2>Log workout</h2>
-          <p>Record working sets, reps, weight, and RIR</p>
-        </div>
-      </div>
-
+      <div class="section-head"><div><h2 data-i18n="logWorkout">Log workout</h2><p data-i18n="logDesc">Record working sets, reps, weight, and RIR</p></div></div>
       <div class="card full">
         <div class="form-grid">
-          <div>
-            <label for="workoutTemplate">Workout</label>
-            <select id="workoutTemplate"></select>
-          </div>
-          <div>
-            <label for="workoutDate">Date</label>
-            <input id="workoutDate" type="date" />
-          </div>
-          <div>
-            <label for="workoutDuration">Duration, minutes</label>
-            <input id="workoutDuration" type="number" min="0" placeholder="75" />
-          </div>
-          <div>
-            <label for="workoutReadiness">Readiness, 1–10</label>
-            <input id="workoutReadiness" type="number" min="1" max="10" placeholder="8" />
-          </div>
+          <div><label for="workoutTemplate" data-i18n="workout">Workout</label><select id="workoutTemplate"></select></div>
+          <div><label for="workoutDate" data-i18n="date">Date</label><input id="workoutDate" type="date" /></div>
+          <div><label for="workoutDuration" data-i18n="durationMinutes">Duration, minutes</label><input id="workoutDuration" type="number" min="0" placeholder="75" /></div>
+          <div><label for="workoutReadiness" data-i18n="readiness">Readiness, 1–10</label><input id="workoutReadiness" type="number" min="1" max="10" placeholder="8" /></div>
         </div>
         <div class="spacer"></div>
-        <label for="workoutNotes">Session notes</label>
-        <textarea id="workoutNotes" placeholder="Energy, sleep, pain, technique cues, what to improve next time…"></textarea>
+        <label for="workoutNotes" data-i18n="sessionNotes">Session notes</label>
+        <textarea id="workoutNotes" data-i18n-placeholder="notesPlaceholder" placeholder="Energy, sleep, pain, technique cues, what to improve next time…"></textarea>
       </div>
 
       <div class="section-head">
-        <div>
-          <h2>Exercises</h2>
-          <p>RIR = reps you could still perform before failure</p>
-        </div>
-        <button class="btn btn-small" id="addExerciseBtn">+ Exercise</button>
+        <div><h2 data-i18n="exercises">Exercises</h2><p data-i18n="rirHelp">RIR = reps you could still perform before failure</p></div>
+        <button class="btn btn-small" id="addExerciseBtn" data-i18n="addExerciseShort">+ Exercise</button>
       </div>
-
       <div id="exerciseList"></div>
-
       <div class="workout-actions">
-        <button class="btn btn-ghost" id="resetWorkoutBtn">Reset</button>
-        <button class="btn btn-primary" id="saveWorkoutBtn">Save workout</button>
+        <button class="btn btn-ghost" id="resetWorkoutBtn" data-i18n="reset">Reset</button>
+        <button class="btn btn-primary" id="saveWorkoutBtn" data-i18n="saveWorkout">Save workout</button>
       </div>
     </section>
 
     <section id="historyView" class="view">
-      <div class="section-head">
-        <div>
-          <h2>Workout history</h2>
-          <p>Tap a session to inspect every set</p>
-        </div>
-      </div>
+      <div class="section-head"><div><h2 data-i18n="history">Workout history</h2><p data-i18n="historyDesc">Tap a session to inspect every set</p></div></div>
       <div id="historyList" class="list"></div>
     </section>
 
     <section id="progressView" class="view">
-      <div class="section-head">
-        <div>
-          <h2>Progress</h2>
-          <p>Track strength and bodyweight trends</p>
-        </div>
-      </div>
-
+      <div class="section-head"><div><h2 data-i18n="progress">Progress</h2><p data-i18n="progressDesc">Track strength and bodyweight trends</p></div></div>
       <div class="card full">
         <div class="form-grid">
+          <div><label for="progressExercise" data-i18n="exercise">Exercise</label><select id="progressExercise"></select></div>
           <div>
-            <label for="progressExercise">Exercise</label>
-            <select id="progressExercise"></select>
-          </div>
-          <div>
-            <label for="progressMetric">Metric</label>
+            <label for="progressMetric" data-i18n="metric">Metric</label>
             <select id="progressMetric">
-              <option value="e1rm">Estimated 1RM</option>
-              <option value="weight">Heaviest weight</option>
-              <option value="volume">Exercise volume</option>
+              <option value="e1rm" data-i18n="estimated1RM">Estimated 1RM</option>
+              <option value="weight" data-i18n="heaviestWeight">Heaviest weight</option>
+              <option value="volume" data-i18n="exerciseVolume">Exercise volume</option>
             </select>
           </div>
         </div>
         <div class="spacer"></div>
-        <div id="strengthChart" class="chart-wrap">
-          <canvas id="progressCanvas" width="800" height="260"></canvas>
-        </div>
+        <div id="strengthChart" class="chart-wrap"><canvas id="progressCanvas" width="800" height="260"></canvas></div>
       </div>
 
       <div class="grid" style="margin-top:14px">
-        <article class="card">
-          <div class="metric" id="selectedBest">—</div>
-          <div class="metric-label">All-time best</div>
-        </article>
-        <article class="card">
-          <div class="metric" id="selectedLatest">—</div>
-          <div class="metric-label">Latest result</div>
-        </article>
-        <article class="card">
-          <div class="metric" id="selectedChange">—</div>
-          <div class="metric-label">Change from first entry</div>
-        </article>
+        <article class="card"><div class="metric" id="selectedBest">—</div><div class="metric-label" data-i18n="allTimeBest">All-time best</div></article>
+        <article class="card"><div class="metric" id="selectedLatest">—</div><div class="metric-label" data-i18n="latestResult">Latest result</div></article>
+        <article class="card"><div class="metric" id="selectedChange">—</div><div class="metric-label" data-i18n="changeFirst">Change from first entry</div></article>
       </div>
 
-      <div class="section-head">
-        <div>
-          <h2>Reference PR library</h2>
-          <p>Imported from your exercise notes dated 14 July 2026</p>
-        </div>
-      </div>
+      <div class="section-head"><div><h2 data-i18n="referencePRs">Reference PR library</h2><p data-i18n="referenceDesc">Imported from your exercise notes dated 14 July 2026</p></div></div>
       <div class="card full">
         <div class="form-grid">
-          <div>
-            <label for="prCategory">Muscle group</label>
-            <select id="prCategory"></select>
-          </div>
-          <div>
-            <label for="prSearch">Search exercise</label>
-            <input id="prSearch" type="search" placeholder="e.g. pulldown, squat, curl" />
-          </div>
+          <div><label for="prCategory" data-i18n="muscleGroup">Muscle group</label><select id="prCategory"></select></div>
+          <div><label for="prSearch" data-i18n="searchExercise">Search exercise</label><input id="prSearch" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="e.g. pulldown, squat, curl" /></div>
         </div>
         <div id="prList" class="list" style="margin-top:12px"></div>
       </div>
 
       <div class="section-head">
-        <div>
-          <h2>Bodyweight</h2>
-          <p>Useful for your mass-gain goal</p>
-        </div>
-        <button class="btn btn-small" id="addBodyweightBtn">+ Entry</button>
+        <div><h2 data-i18n="bodyweight">Bodyweight</h2><p data-i18n="bodyweightDesc">Useful for your mass-gain goal</p></div>
+        <button class="btn btn-small" id="addBodyweightBtn" data-i18n="addEntry">+ Entry</button>
       </div>
       <div class="card full">
-        <div class="chart-wrap">
-          <canvas id="bodyweightCanvas" width="800" height="220"></canvas>
-        </div>
+        <div class="chart-wrap"><canvas id="bodyweightCanvas" width="800" height="220"></canvas></div>
         <div id="bodyweightList" class="list" style="margin-top:12px"></div>
       </div>
     </section>
 
     <section id="settingsView" class="view">
-      <div class="section-head">
-        <div>
-          <h2>Settings & data</h2>
-          <p>Your records stay in your browser unless you export them</p>
-        </div>
-      </div>
-
+      <div class="section-head"><div><h2 data-i18n="settingsData">Settings & data</h2><p data-i18n="settingsDesc">Your records stay in your browser unless you export them</p></div></div>
       <div class="card full">
-        <h3>Training preferences</h3>
+        <h3 data-i18n="trainingPreferences">Training preferences</h3>
         <div class="form-grid">
           <div>
-            <label for="unitSelect">Weight unit</label>
-            <select id="unitSelect">
-              <option value="kg">Kilograms</option>
-              <option value="lb">Pounds</option>
-            </select>
+            <label for="unitSelect" data-i18n="weightUnit">Weight unit</label>
+            <select id="unitSelect"><option value="kg" data-i18n="kilograms">Kilograms</option><option value="lb" data-i18n="pounds">Pounds</option></select>
           </div>
+          <div><label for="defaultSets" data-i18n="defaultSets">Default working sets</label><input id="defaultSets" type="number" min="1" max="10" value="3" /></div>
           <div>
-            <label for="defaultSets">Default working sets</label>
-            <input id="defaultSets" type="number" min="1" max="10" value="3" />
+            <label for="languageSelect" data-i18n="language">Language</label>
+            <select id="languageSelect"><option value="en" data-i18n="english">English</option><option value="ru" data-i18n="russian">Russian</option></select>
           </div>
         </div>
         <div class="spacer"></div>
-        <button class="btn" id="saveSettingsBtn">Save preferences</button>
+        <button class="btn" id="saveSettingsBtn" data-i18n="savePreferences">Save preferences</button>
       </div>
 
-      <div class="section-head">
-        <div>
-          <h2>Backup</h2>
-          <p>Export before changing phones or clearing browser data</p>
-        </div>
-      </div>
+      <div class="section-head"><div><h2 data-i18n="backup">Backup</h2><p data-i18n="backupDesc">Export before changing phones or clearing browser data</p></div></div>
       <div class="card full">
-        <div class="notice">
-          Export creates a JSON backup containing workouts, bodyweight entries, routines, and settings.
-        </div>
+        <div class="notice" data-i18n="backupNotice">Export creates a JSON backup containing workouts, bodyweight entries, routines, and settings.</div>
         <div class="spacer"></div>
         <div class="inline-actions">
-          <button class="btn" id="exportBtn">Export data</button>
-          <label class="btn" for="importInput" style="margin:0;color:var(--text)">Import data</label>
+          <button class="btn" id="exportBtn" data-i18n="exportData">Export data</button>
+          <label class="btn" for="importInput" style="margin:0;color:var(--text)" data-i18n="importData">Import data</label>
           <input id="importInput" type="file" accept=".json,application/json" hidden />
-          <button class="btn btn-danger" id="clearDataBtn">Clear all data</button>
+          <button class="btn btn-danger" id="clearDataBtn" data-i18n="clearData">Clear all data</button>
         </div>
       </div>
 
-      <div class="section-head">
-        <div>
-          <h2>Install on iPhone</h2>
-          <p>Use Safari’s Share menu, then “Add to Home Screen” after hosting the folder</p>
-        </div>
-      </div>
-      <div class="card full">
-        <p class="muted" style="margin:0;line-height:1.6">
-          The app is a Progressive Web App. It can run like a normal app once uploaded to any HTTPS host such as GitHub Pages, Netlify, or Vercel.
-        </p>
-      </div>
+      <div class="section-head"><div><h2 data-i18n="installIphone">Install on iPhone</h2><p data-i18n="installDesc">Use Safari’s Share menu, then “Add to Home Screen” after hosting the folder</p></div></div>
+      <div class="card full"><p class="muted" style="margin:0;line-height:1.6" data-i18n="installBody">The app is a Progressive Web App. It can run like a normal app once uploaded to any HTTPS host such as GitHub Pages, Netlify, or Vercel.</p></div>
     </section>
   </main>
 
-  <nav class="nav" aria-label="Primary navigation">
-    <button class="active" data-view="dashboardView"><span class="icon">⌂</span><span>Home</span></button>
-    <button data-view="logView"><span class="icon">＋</span><span>Log</span></button>
-    <button data-view="historyView"><span class="icon">◷</span><span>History</span></button>
-    <button data-view="progressView"><span class="icon">↗</span><span>Progress</span></button>
-    <button data-view="settingsView"><span class="icon">⚙</span><span>Settings</span></button>
+  <nav class="nav" data-i18n-aria-label="primaryNavigation" aria-label="Primary navigation">
+    <button class="active" data-view="dashboardView"><span class="icon">⌂</span><span data-i18n="home">Home</span></button>
+    <button data-view="logView"><span class="icon">＋</span><span data-i18n="log">Log</span></button>
+    <button data-view="historyView"><span class="icon">◷</span><span data-i18n="history">History</span></button>
+    <button data-view="progressView"><span class="icon">↗</span><span data-i18n="progress">Progress</span></button>
+    <button data-view="settingsView"><span class="icon">⚙</span><span data-i18n="settings">Settings</span></button>
   </nav>
 
   <div id="exerciseModal" class="modal" role="dialog" aria-modal="true">
     <div class="modal-panel">
-      <div class="modal-head">
-        <h3>Add exercise</h3>
-        <button class="icon-btn" data-close-modal="exerciseModal">×</button>
-      </div>
-      <label for="newExerciseName">Exercise name</label>
-      <input id="newExerciseName" list="exerciseSuggestions" placeholder="e.g. Lat pulldown" />
+      <div class="modal-head"><h3 data-i18n="addExercise">Add exercise</h3><button class="icon-btn" data-close-modal="exerciseModal" data-i18n-title="close">×</button></div>
+      <label for="newExerciseName" data-i18n="exerciseName">Exercise name</label>
+      <input id="newExerciseName" list="exerciseSuggestions" data-i18n-placeholder="exerciseNamePlaceholder" placeholder="e.g. Lat pulldown" />
       <datalist id="exerciseSuggestions"></datalist>
       <div class="spacer"></div>
-      <label for="newExerciseCategory">Muscle group</label>
+      <label for="newExerciseCategory" data-i18n="muscleGroup">Muscle group</label>
       <select id="newExerciseCategory">
-        <option>Chest</option><option>Back</option><option>Legs</option><option>Shoulders</option>
-        <option>Biceps</option><option>Triceps</option><option>Neck</option><option>Forearms</option>
-        <option>Core</option><option>Other</option>
+        <option value="Chest" data-i18n="categoryChest">Chest</option><option value="Back" data-i18n="categoryBack">Back</option>
+        <option value="Legs" data-i18n="categoryLegs">Legs</option><option value="Shoulders" data-i18n="categoryShoulders">Shoulders</option>
+        <option value="Biceps" data-i18n="categoryBiceps">Biceps</option><option value="Triceps" data-i18n="categoryTriceps">Triceps</option>
+        <option value="Neck" data-i18n="categoryNeck">Neck</option><option value="Forearms" data-i18n="categoryForearms">Forearms</option>
+        <option value="Core" data-i18n="categoryCore">Core</option><option value="Other" data-i18n="categoryOther">Other</option>
       </select>
       <div class="spacer"></div>
-      <button class="btn btn-primary" id="confirmAddExerciseBtn">Add exercise</button>
+      <button class="btn btn-primary" id="confirmAddExerciseBtn" data-i18n="addExercise">Add exercise</button>
     </div>
   </div>
 
   <div id="bodyweightModal" class="modal" role="dialog" aria-modal="true">
     <div class="modal-panel">
-      <div class="modal-head">
-        <h3>Add bodyweight</h3>
-        <button class="icon-btn" data-close-modal="bodyweightModal">×</button>
-      </div>
+      <div class="modal-head"><h3 data-i18n="addBodyweight">Add bodyweight</h3><button class="icon-btn" data-close-modal="bodyweightModal" data-i18n-title="close">×</button></div>
       <div class="form-grid">
-        <div>
-          <label for="bodyweightDate">Date</label>
-          <input id="bodyweightDate" type="date" />
-        </div>
-        <div>
-          <label for="bodyweightValue">Weight</label>
-          <input id="bodyweightValue" type="number" min="0" step="0.1" placeholder="64.0" />
-        </div>
+        <div><label for="bodyweightDate" data-i18n="date">Date</label><input id="bodyweightDate" type="date" /></div>
+        <div><label for="bodyweightValue" data-i18n="weight">Weight</label><input id="bodyweightValue" type="number" min="0" step="0.1" placeholder="64.0" /></div>
       </div>
       <div class="spacer"></div>
-      <label for="bodyweightNote">Note</label>
-      <input id="bodyweightNote" placeholder="Morning, fasted" />
+      <label for="bodyweightNote" data-i18n="note">Note</label>
+      <input id="bodyweightNote" data-i18n-placeholder="bodyweightNotePlaceholder" placeholder="Morning, fasted" />
       <div class="spacer"></div>
-      <button class="btn btn-primary" id="confirmBodyweightBtn">Save entry</button>
+      <button class="btn btn-primary" id="confirmBodyweightBtn" data-i18n="saveEntry">Save entry</button>
     </div>
   </div>
 
@@ -1234,7 +1137,7 @@
   ];
   const DEFAULT_DATA = {
     version: DATA_VERSION,
-    settings: { unit: "kg", defaultSets: 3 },
+    settings: { unit: "kg", defaultSets: 3, language: "en" },
     trainingPlan: TRAINING_PLAN,
     referencePRs: REFERENCE_PRS,
     templates: [
@@ -1366,11 +1269,872 @@
   const $ = (id) => document.getElementById(id);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
 
+  const TEXT = {
+    "appSubtitle": [
+      "Private gym progress tracker",
+      "Личный трекер прогресса в зале"
+    ],
+    "storage": [
+      "Data saved on this device",
+      "Данные хранятся на этом устройстве"
+    ],
+    "language": [
+      "Language",
+      "Язык"
+    ],
+    "english": [
+      "English",
+      "Английский"
+    ],
+    "russian": [
+      "Russian",
+      "Русский"
+    ],
+    "readyTitle": [
+      "Ready to train?",
+      "Готов к тренировке?"
+    ],
+    "readyText": [
+      "Log your session, beat one small number, and leave with a clear record.",
+      "Запиши тренировку, улучши один показатель и сохрани результат."
+    ],
+    "startWorkout": [
+      "Start workout",
+      "Начать тренировку"
+    ],
+    "sessionsWeek": [
+      "Sessions this week",
+      "Тренировок на этой неделе"
+    ],
+    "startQuality": [
+      "Start with one quality session",
+      "Начни с одной качественной тренировки"
+    ],
+    "weeklyVolume": [
+      "Weekly training volume",
+      "Недельный тренировочный объём"
+    ],
+    "volumeFormula": [
+      "Weight × reps across all sets",
+      "Вес × повторения во всех подходах"
+    ],
+    "trackedRecords": [
+      "Tracked personal records",
+      "Отслеживаемые личные рекорды"
+    ],
+    "importedBests": [
+      "Imported references + logged bests",
+      "Импортированные ориентиры + лучшие результаты"
+    ],
+    "currentBlock": [
+      "Current training block",
+      "Текущий тренировочный блок"
+    ],
+    "calendarDesc": [
+      "Your hard, PR, and recovery calendar",
+      "Календарь тяжёлых, PR- и разгрузочных недель"
+    ],
+    "currentPhase": [
+      "Current phase",
+      "Текущая фаза"
+    ],
+    "nextPhase": [
+      "Next phase",
+      "Следующая фаза"
+    ],
+    "progression": [
+      "Progression",
+      "Прогрессия"
+    ],
+    "upperProgression": [
+      "Upper +2.5 kg",
+      "Верх тела +2,5 кг"
+    ],
+    "lowerProgression": [
+      "Lower +5 kg",
+      "Низ тела +5 кг"
+    ],
+    "loadingPhase": [
+      "Loading the current training phase…",
+      "Загрузка текущей тренировочной фазы…"
+    ],
+    "weeklySplit": [
+      "Your weekly split",
+      "Твой недельный сплит"
+    ],
+    "splitDesc": [
+      "Preloaded from your current routine",
+      "Загружено из твоей текущей программы"
+    ],
+    "recentActivity": [
+      "Recent activity",
+      "Последние тренировки"
+    ],
+    "recentDesc": [
+      "Your latest saved workouts",
+      "Последние сохранённые тренировки"
+    ],
+    "logWorkout": [
+      "Log workout",
+      "Записать тренировку"
+    ],
+    "logDesc": [
+      "Record working sets, reps, weight, and RIR",
+      "Записывай рабочие подходы, повторения, вес и RIR"
+    ],
+    "workout": [
+      "Workout",
+      "Тренировка"
+    ],
+    "date": [
+      "Date",
+      "Дата"
+    ],
+    "durationMinutes": [
+      "Duration, minutes",
+      "Продолжительность, минуты"
+    ],
+    "readiness": [
+      "Readiness, 1–10",
+      "Готовность, 1–10"
+    ],
+    "sessionNotes": [
+      "Session notes",
+      "Заметки о тренировке"
+    ],
+    "notesPlaceholder": [
+      "Energy, sleep, pain, technique cues, what to improve next time…",
+      "Энергия, сон, боль, техника и что улучшить в следующий раз…"
+    ],
+    "exercises": [
+      "Exercises",
+      "Упражнения"
+    ],
+    "rirHelp": [
+      "RIR = reps you could still perform before failure",
+      "RIR = сколько повторений осталось до отказа"
+    ],
+    "addExerciseShort": [
+      "+ Exercise",
+      "+ Упражнение"
+    ],
+    "reset": [
+      "Reset",
+      "Сбросить"
+    ],
+    "saveWorkout": [
+      "Save workout",
+      "Сохранить тренировку"
+    ],
+    "history": [
+      "Workout history",
+      "История тренировок"
+    ],
+    "historyDesc": [
+      "Tap a session to inspect every set",
+      "Нажми на тренировку, чтобы посмотреть все подходы"
+    ],
+    "progress": [
+      "Progress",
+      "Прогресс"
+    ],
+    "progressDesc": [
+      "Track strength and bodyweight trends",
+      "Отслеживай динамику силы и веса тела"
+    ],
+    "exercise": [
+      "Exercise",
+      "Упражнение"
+    ],
+    "metric": [
+      "Metric",
+      "Показатель"
+    ],
+    "estimated1RM": [
+      "Estimated 1RM",
+      "Расчётный 1ПМ"
+    ],
+    "heaviestWeight": [
+      "Heaviest weight",
+      "Максимальный вес"
+    ],
+    "exerciseVolume": [
+      "Exercise volume",
+      "Объём упражнения"
+    ],
+    "allTimeBest": [
+      "All-time best",
+      "Лучший результат"
+    ],
+    "latestResult": [
+      "Latest result",
+      "Последний результат"
+    ],
+    "changeFirst": [
+      "Change from first entry",
+      "Изменение от первой записи"
+    ],
+    "referencePRs": [
+      "Reference PR library",
+      "Справочник личных рекордов"
+    ],
+    "referenceDesc": [
+      "Imported from your exercise notes dated 14 July 2026",
+      "Импортировано из заметок об упражнениях от 14 июля 2026"
+    ],
+    "muscleGroup": [
+      "Muscle group",
+      "Группа мышц"
+    ],
+    "searchExercise": [
+      "Search exercise",
+      "Поиск упражнения"
+    ],
+    "searchPlaceholder": [
+      "e.g. pulldown, squat, curl",
+      "например: тяга, присед, бицепс"
+    ],
+    "bodyweight": [
+      "Bodyweight",
+      "Вес тела"
+    ],
+    "bodyweightDesc": [
+      "Useful for your mass-gain goal",
+      "Полезно для цели по набору массы"
+    ],
+    "addEntry": [
+      "+ Entry",
+      "+ Запись"
+    ],
+    "settingsData": [
+      "Settings & data",
+      "Настройки и данные"
+    ],
+    "settingsDesc": [
+      "Your records stay in your browser unless you export them",
+      "Записи хранятся в браузере, пока ты их не экспортируешь"
+    ],
+    "trainingPreferences": [
+      "Training preferences",
+      "Настройки тренировок"
+    ],
+    "weightUnit": [
+      "Weight unit",
+      "Единица веса"
+    ],
+    "kilograms": [
+      "Kilograms",
+      "Килограммы"
+    ],
+    "pounds": [
+      "Pounds",
+      "Фунты"
+    ],
+    "defaultSets": [
+      "Default working sets",
+      "Рабочих подходов по умолчанию"
+    ],
+    "savePreferences": [
+      "Save preferences",
+      "Сохранить настройки"
+    ],
+    "backup": [
+      "Backup",
+      "Резервная копия"
+    ],
+    "backupDesc": [
+      "Export before changing phones or clearing browser data",
+      "Экспортируй данные перед сменой телефона или очисткой браузера"
+    ],
+    "backupNotice": [
+      "Export creates a JSON backup containing workouts, bodyweight entries, routines, and settings.",
+      "Экспорт создаёт JSON-копию с тренировками, весом тела, программами и настройками."
+    ],
+    "exportData": [
+      "Export data",
+      "Экспортировать данные"
+    ],
+    "importData": [
+      "Import data",
+      "Импортировать данные"
+    ],
+    "clearData": [
+      "Clear all data",
+      "Удалить все данные"
+    ],
+    "installIphone": [
+      "Install on iPhone",
+      "Установка на iPhone"
+    ],
+    "installDesc": [
+      "Use Safari’s Share menu, then “Add to Home Screen” after hosting the folder",
+      "Открой меню «Поделиться» в Safari и выбери «На экран Домой»"
+    ],
+    "installBody": [
+      "The app is a Progressive Web App. It can run like a normal app once uploaded to any HTTPS host such as GitHub Pages, Netlify, or Vercel.",
+      "Это Progressive Web App. После публикации на HTTPS-хостинге, например GitHub Pages, Netlify или Vercel, оно работает как обычное приложение."
+    ],
+    "primaryNavigation": [
+      "Primary navigation",
+      "Основная навигация"
+    ],
+    "home": [
+      "Home",
+      "Главная"
+    ],
+    "log": [
+      "Log",
+      "Запись"
+    ],
+    "settings": [
+      "Settings",
+      "Настройки"
+    ],
+    "addExercise": [
+      "Add exercise",
+      "Добавить упражнение"
+    ],
+    "exerciseName": [
+      "Exercise name",
+      "Название упражнения"
+    ],
+    "exerciseNamePlaceholder": [
+      "e.g. Lat pulldown",
+      "например: тяга верхнего блока"
+    ],
+    "addBodyweight": [
+      "Add bodyweight",
+      "Добавить вес тела"
+    ],
+    "weight": [
+      "Weight",
+      "Вес"
+    ],
+    "note": [
+      "Note",
+      "Заметка"
+    ],
+    "bodyweightNotePlaceholder": [
+      "Morning, fasted",
+      "Утром, натощак"
+    ],
+    "saveEntry": [
+      "Save entry",
+      "Сохранить запись"
+    ],
+    "close": [
+      "Close",
+      "Закрыть"
+    ],
+    "categoryChest": [
+      "Chest",
+      "Грудь"
+    ],
+    "categoryBack": [
+      "Back",
+      "Спина"
+    ],
+    "categoryLegs": [
+      "Legs",
+      "Ноги"
+    ],
+    "categoryShoulders": [
+      "Shoulders",
+      "Плечи"
+    ],
+    "categoryBiceps": [
+      "Biceps",
+      "Бицепс"
+    ],
+    "categoryTriceps": [
+      "Triceps",
+      "Трицепс"
+    ],
+    "categoryNeck": [
+      "Neck",
+      "Шея"
+    ],
+    "categoryForearms": [
+      "Forearms",
+      "Предплечья"
+    ],
+    "categoryCore": [
+      "Core",
+      "Кор"
+    ],
+    "categoryOther": [
+      "Other",
+      "Другое"
+    ],
+    "noDate": [
+      "No date",
+      "Без даты"
+    ],
+    "workoutFocus": [
+      "{count}. Focus on controlled reps and small, measurable progress.",
+      "{count}. Сосредоточься на контролируемых повторениях и небольшом измеримом прогрессе."
+    ],
+    "progressionVisible": [
+      "Log your session and keep your progression visible.",
+      "Записывай тренировку и отслеживай прогрессию."
+    ],
+    "start": [
+      "Start",
+      "Начать"
+    ],
+    "volumeValue": [
+      "{value} {unit} volume",
+      "Объём: {value} {unit}"
+    ],
+    "noSavedWorkouts": [
+      "No saved workouts yet. Your first session will appear here.",
+      "Сохранённых тренировок пока нет. Первая появится здесь."
+    ],
+    "week": [
+      "Week",
+      "Неделя"
+    ],
+    "noActiveCycle": [
+      "No active cycle",
+      "Нет активного цикла"
+    ],
+    "calendarEnds": [
+      "Calendar ends 4 Oct 2026",
+      "Календарь заканчивается 4 окт. 2026"
+    ],
+    "planComplete": [
+      "Plan complete",
+      "План завершён"
+    ],
+    "updateCycle": [
+      "Update the cycle calendar",
+      "Обнови календарь цикла"
+    ],
+    "noPhaseToday": [
+      "There is no phase scheduled for today. Update the training cycle before applying progression rules.",
+      "На сегодня фаза не запланирована. Обнови цикл перед применением правил прогрессии."
+    ],
+    "hardPrGuidance": [
+      "Choose only 1–2 exercises for a PR attempt. Beat either weight or reps, not every exercise in the session.",
+      "Выбери только 1–2 упражнения для попытки PR. Улучши либо вес, либо повторения, а не всё сразу."
+    ],
+    "easyGuidance": [
+      "Reduce working weights by 20–30%, use 12–15 clean reps, avoid failure, and prioritize recovery.",
+      "Снизь рабочие веса на 20–30%, делай 12–15 чистых повторений без отказа и удели внимание восстановлению."
+    ],
+    "transitionGuidance": [
+      "Treat this as a transition week. Use recovery and performance to decide whether each exercise stays easy or returns to working weight.",
+      "Считай эту неделю переходной. По восстановлению и результатам решай, оставить упражнение лёгким или вернуть рабочий вес."
+    ],
+    "hardGuidance": [
+      "Use your working weight for 10–12 reps. Increase only after 3 × 12 with good technique; the final isolation set may reach failure.",
+      "Работай с обычным весом на 10–12 повторений. Повышай его только после чистых 3 × 12; последний изолирующий подход можно делать до отказа."
+    ],
+    "phaseHard": [
+      "Hard",
+      "Тяжёлая"
+    ],
+    "phaseHardPR": [
+      "Hard PR",
+      "PR-неделя"
+    ],
+    "phaseEasy": [
+      "Easy",
+      "Разгрузочная"
+    ],
+    "phaseTransition": [
+      "Easy / Hard",
+      "Переходная"
+    ],
+    "set": [
+      "Set",
+      "Подход"
+    ],
+    "reps": [
+      "Reps",
+      "Повторы"
+    ],
+    "removeExercise": [
+      "Remove exercise",
+      "Удалить упражнение"
+    ],
+    "removeSet": [
+      "Remove set",
+      "Удалить подход"
+    ],
+    "addSet": [
+      "+ Set",
+      "+ Подход"
+    ],
+    "atLeastOneSet": [
+      "Each exercise needs at least one set",
+      "В каждом упражнении должен остаться хотя бы один подход"
+    ],
+    "repetitions": [
+      "reps",
+      "повт."
+    ],
+    "loadNotRecorded": [
+      "Load not recorded",
+      "Вес не указан"
+    ],
+    "perSide": [
+      " / side",
+      " на сторону"
+    ],
+    "perDumbbell": [
+      " / dumbbell",
+      " на гантель"
+    ],
+    "previousLoggedE1rm": [
+      "Previous logged e1RM: {value} {unit}",
+      "Предыдущий расчётный 1ПМ: {value} {unit}"
+    ],
+    "referenceBest": [
+      "Reference best: {value}",
+      "Ориентир: {value}"
+    ],
+    "noPreviousData": [
+      "No previous data",
+      "Предыдущих данных нет"
+    ],
+    "chooseWorkoutDate": [
+      "Choose a workout date",
+      "Выбери дату тренировки"
+    ],
+    "enterCompletedSet": [
+      "Enter at least one completed set",
+      "Заполни хотя бы один выполненный подход"
+    ],
+    "workoutSaved": [
+      "Workout saved",
+      "Тренировка сохранена"
+    ],
+    "workoutReset": [
+      "Workout reset",
+      "Тренировка сброшена"
+    ],
+    "minShort": [
+      "min",
+      "мин"
+    ],
+    "readinessShort": [
+      "readiness",
+      "готовность"
+    ],
+    "repeatWorkout": [
+      "Repeat workout",
+      "Повторить тренировку"
+    ],
+    "delete": [
+      "Delete",
+      "Удалить"
+    ],
+    "noHistory": [
+      "No history yet. Save a workout to begin tracking progress.",
+      "Истории пока нет. Сохрани тренировку, чтобы начать отслеживать прогресс."
+    ],
+    "deleteWorkoutConfirm": [
+      "Delete this workout permanently?",
+      "Удалить эту тренировку без возможности восстановления?"
+    ],
+    "workoutDeleted": [
+      "Workout deleted",
+      "Тренировка удалена"
+    ],
+    "all": [
+      "All",
+      "Все"
+    ],
+    "noReferenceMatch": [
+      "No reference PRs match this filter.",
+      "По этому фильтру личные рекорды не найдены."
+    ],
+    "notEnoughData": [
+      "Not enough data yet",
+      "Пока недостаточно данных"
+    ],
+    "baseline": [
+      "Baseline",
+      "Базовый уровень"
+    ],
+    "noBodyweight": [
+      "No bodyweight entries yet.",
+      "Записей веса тела пока нет."
+    ],
+    "deleteBodyweight": [
+      "Delete bodyweight entry",
+      "Удалить запись веса тела"
+    ],
+    "bodyweightDeleted": [
+      "Bodyweight entry deleted",
+      "Запись веса тела удалена"
+    ],
+    "invalidDateWeight": [
+      "Enter a valid date and weight",
+      "Укажи корректные дату и вес"
+    ],
+    "bodyweightSaved": [
+      "Bodyweight saved",
+      "Вес тела сохранён"
+    ],
+    "enterExerciseName": [
+      "Enter an exercise name",
+      "Введи название упражнения"
+    ],
+    "exerciseAdded": [
+      "Exercise added",
+      "Упражнение добавлено"
+    ],
+    "backupImported": [
+      "Backup imported",
+      "Резервная копия импортирована"
+    ],
+    "importFailed": [
+      "Could not import this file",
+      "Не удалось импортировать файл"
+    ],
+    "preferencesSaved": [
+      "Preferences saved",
+      "Настройки сохранены"
+    ],
+    "languageChanged": [
+      "Language changed",
+      "Язык изменён"
+    ],
+    "clearConfirm": [
+      "Clear every workout, bodyweight entry, and preference?",
+      "Удалить все тренировки, записи веса тела и настройки?"
+    ],
+    "allDataCleared": [
+      "All data cleared",
+      "Все данные удалены"
+    ],
+    "kgShort": [
+      "kg",
+      "кг"
+    ],
+    "lbShort": [
+      "lb",
+      "фунт."
+    ]
+  };
+  const EXERCISE_RU = {
+    "Pull Down": "Тяга сверху в тренажёре",
+    "Lat Pulldown": "Тяга верхнего блока",
+    "Horizontal Cable Row": "Горизонтальная тяга блока",
+    "Cambered Lat Pulldown": "Тяга изогнутой рукояти сверху",
+    "Low Row": "Нижняя тяга",
+    "Barbell Row": "Тяга штанги в наклоне",
+    "Seated Row": "Тяга сидя",
+    "Kneeling Single-Arm Row": "Тяга одной рукой с колена",
+    "Weighted Pull-Up": "Подтягивания с отягощением",
+    "Vertical Pull": "Вертикальная тяга",
+    "Lat Prayer": "Молитва на широчайшие",
+    "Bar Pull": "Тяга грифа",
+    "Barbell Curl": "Сгибание рук со штангой",
+    "Machine Curl": "Сгибание рук в тренажёре",
+    "Rope Curl": "Сгибание рук с канатом",
+    "Incline Dumbbell Curl": "Сгибание гантелей на наклонной скамье",
+    "Dumbbell Curl": "Сгибание рук с гантелями",
+    "Single-Arm Hammer Curl": "Молотковое сгибание одной рукой",
+    "Spider Curl": "Паучьи сгибания",
+    "Biceps Machine (Unspecified)": "Бицепс в тренажёре (не уточнено)",
+    "Hammer Curl": "Молотковые сгибания",
+    "Brachialis Curl": "Сгибание на брахиалис",
+    "Forearm Curl": "Сгибание предплечий",
+    "Brachialis Cable Pull": "Тяга блока на брахиалис",
+    "Leg Extension": "Разгибание ног",
+    "Single-Leg Extension": "Разгибание одной ноги",
+    "Goblet Squat": "Гоблет-присед",
+    "Back Squat": "Присед со штангой",
+    "Romanian Deadlift (Barbell)": "Румынская тяга со штангой",
+    "Romanian Deadlift (Dumbbells)": "Румынская тяга с гантелями",
+    "Bulgarian Split Squat": "Болгарские приседы",
+    "Glute Machine": "Ягодичный тренажёр",
+    "Dumbbell Calf Raise": "Подъём на носки с гантелями",
+    "Smith Machine Calf Raise": "Подъём на носки в Смите",
+    "Standing Calf Extension": "Разгибание икр стоя",
+    "Resistance Band": "Упражнение с резинкой",
+    "Squat Machine": "Присед в тренажёре",
+    "Leg Press": "Жим ногами",
+    "Rotary Calf": "Икры в тренажёре Rotary",
+    "Cable Fly": "Сведение рук в кроссовере",
+    "Wide Chest Press": "Жим от груди широким хватом",
+    "Chest Press Machine": "Жим от груди в тренажёре",
+    "Dumbbell Pullover": "Пуловер с гантелью",
+    "Incline Dumbbell Press": "Жим гантелей на наклонной скамье",
+    "Power Smith Chest Press": "Жим от груди в Power Smith",
+    "Dumbbell Chest Press": "Жим гантелей лёжа",
+    "Incline Bench Press": "Жим лёжа на наклонной скамье",
+    "Adjustable Pulley Rear Delt": "Задняя дельта на регулируемом блоке",
+    "Adjustable Pulley Shoulder": "Плечи на регулируемом блоке",
+    "Shoulder Press Machine": "Жим на плечи в тренажёре",
+    "Dumbbell Shoulder Press": "Жим гантелей на плечи",
+    "Standing Dumbbell Low Row": "Нижняя тяга гантелей стоя",
+    "Technogym Shoulder Press": "Жим на плечи Technogym",
+    "Military Press": "Армейский жим",
+    "Seated Military Press": "Армейский жим сидя",
+    "Lateral Raise": "Махи гантелей в стороны",
+    "Rear Delt Fly": "Разведение на заднюю дельту",
+    "Cable Lateral Raise": "Махи в сторону на блоке",
+    "Hammer Front Delt Fly": "Подъём на переднюю дельту Hammer",
+    "Arm-Wrestling Cable Rotation": "Ротация на блоке для армрестлинга",
+    "Smith Military Press": "Армейский жим в Смите",
+    "Triceps Pushdown": "Разгибание рук на блоке",
+    "Overhead Cable Triceps Extension": "Разгибание рук из-за головы на блоке",
+    "Overhead Dumbbell Triceps Extension": "Разгибание гантели из-за головы",
+    "CBUM Pull": "Тяга CBUM",
+    "Arm Extension Machine": "Разгибание рук в тренажёре",
+    "CBUM Long-Head Pull": "Тяга CBUM на длинную головку",
+    "Neck Pull": "Тяга на шею",
+    "Forearm Internal Rotation": "Внутренняя ротация предплечья",
+    "Barbell Wrist Pull": "Тяга штанги кистями к себе",
+    "Short-Bar Forearm Raise": "Подъём малого грифа на предплечья"
+  };
+  const NOTE_RU = {
+    "Machine load recorded for each side": "Вес указан на каждую сторону тренажёра",
+    "Recorded for one- or two-arm variation": "Указано для варианта одной или двумя руками",
+    "Working range recorded as 50–55 kg": "Рабочий диапазон: 50–55 кг",
+    "Machine; alternate setup recorded as 37.5 kg per side": "Тренажёр; другой вариант: 37,5 кг на сторону",
+    "Bar weight was not specified": "Вес грифа не указан",
+    "Usual working weight recorded as 17.5 kg": "Обычный рабочий вес: 17,5 кг",
+    "Long-head emphasis": "Акцент на длинную головку",
+    "Short-head emphasis": "Акцент на короткую головку",
+    "Exercise name was generic in the source notes": "В исходных заметках упражнение указано без уточнения",
+    "Check 12 clean reps before increasing": "Перед повышением проверь 12 чистых повторений",
+    "Source marked this as 32.5 kg+": "В источнике указано 32,5 кг+",
+    "Regular load also recorded as 67.5 kg": "Обычный вес также указан как 67,5 кг",
+    "Another setup: 27.5 kg per side, barefoot, toes out": "Другой вариант: 27,5 кг на сторону, босиком, носки наружу",
+    "Implement configuration was not specified": "Вариант инвентаря не уточнён",
+    "3 × 25 recorded": "Записано 3 × 25",
+    "Resistance level was not specified": "Уровень сопротивления не указан",
+    "Listed as cable pulls in the source notes": "В исходных заметках указано как cable pulls",
+    "Another machine was recorded at 125 lb": "На другом тренажёре указано 125 фунтов",
+    "Source marked this as 12.25 kg per side+": "В источнике указано 12,25 кг+ на сторону",
+    "Power On machine": "Тренажёр Power On",
+    "Recorded range: 17.5–36 kg": "Указанный диапазон: 17,5–36 кг",
+    "Source marked this as 12 kg+": "В источнике указано 12 кг+",
+    "Consider increasing after 24 Aug 2026 if 3 × 12 is clean": "Можно повысить после 24 августа 2026, если 3 × 12 выполнены чисто",
+    "Long-head emphasis; Power On machine": "Акцент на длинную головку; тренажёр Power On",
+    "Source marked this as 5 kg+": "В источнике указано 5 кг+",
+    "Recheck before increasing": "Перепроверь технику перед повышением",
+    "3 × 20 plus 1 × 10 recorded": "Записано 3 × 20 и 1 × 10"
+  };
+  const RULE_RU = {
+    "Complete 1 warm-up set, then 3 working sets.": "Выполни 1 разминочный и затем 3 рабочих подхода.",
+    "Use 10–12 reps on hard weeks; 8–10 is acceptable after increasing weight.": "На тяжёлых неделях делай 10–12 повторений; после повышения веса допустимо 8–10.",
+    "Increase only after 3 × 12 with good technique: +2.5 kg upper body or +5 kg lower body.": "Повышай вес только после чистых 3 × 12: +2,5 кг для верха или +5 кг для низа.",
+    "Rest 2–4 minutes and use slow, controlled reps.": "Отдыхай 2–4 минуты и выполняй повторения медленно и подконтрольно.",
+    "Only the final isolation set may reach failure; keep compound lifts short of failure.": "До отказа можно выполнять только последний изолирующий подход; в базовых упражнениях оставляй запас.",
+    "On machines, an optional drop set can follow the third working set.": "В тренажёрах после третьего рабочего подхода можно добавить дроп-сет."
+  };
+
+  const CATEGORY_KEYS = {
+    Chest:"categoryChest", Back:"categoryBack", Legs:"categoryLegs", Shoulders:"categoryShoulders",
+    Biceps:"categoryBiceps", Triceps:"categoryTriceps", Neck:"categoryNeck",
+    Forearms:"categoryForearms", Core:"categoryCore", Other:"categoryOther", All:"all"
+  };
+  const TEMPLATE_RU = {
+    push:"Жим · Грудь + Трицепс",
+    pull:"Тяга · Спина + Бицепс",
+    legs:"Ноги + Плечи",
+    "chest-triceps":"Грудь + Трицепс",
+    "legs-shoulders":"Ноги + Плечи",
+    "back-biceps":"Спина + Бицепс"
+  };
+  const WORKOUT_RU = {
+    "Push · Chest + Triceps":"Жим · Грудь + Трицепс",
+    "Pull · Back + Biceps":"Тяга · Спина + Бицепс",
+    "Legs + Shoulders":"Ноги + Плечи",
+    "Chest + Triceps":"Грудь + Трицепс",
+    "Back + Biceps":"Спина + Бицепс"
+  };
+  const DAY_RU = { Tuesday:"Вторник", Thursday:"Четверг", Saturday:"Суббота" };
+
+  function getLanguage() { return data.settings.language === "ru" ? "ru" : "en"; }
+  function getLocale() { return getLanguage() === "ru" ? "ru-RU" : "en-US"; }
+  function t(key, vars = {}) {
+    const pair = TEXT[key];
+    let value = pair ? pair[getLanguage() === "ru" ? 1 : 0] : key;
+    Object.entries(vars).forEach(([name, replacement]) => {
+      value = value.split("{" + name + "}").join(String(replacement));
+    });
+    return value;
+  }
   function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
-  function todayISO() { return new Date().toISOString().slice(0, 10); }
+  function todayISO() {
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  }
   function formatDate(value) {
-    if (!value) return "No date";
-    return new Intl.DateTimeFormat("en", { day:"numeric", month:"short", year:"numeric" }).format(new Date(value + "T12:00:00"));
+    if (!value) return t("noDate");
+    return new Intl.DateTimeFormat(getLocale(), { day:"numeric", month:"short", year:"numeric" }).format(new Date(value + "T12:00:00"));
+  }
+  function unitLabel(unit = getUnit()) {
+    if (unit === "kg") return t("kgShort");
+    if (unit === "lb") return t("lbShort");
+    return unit;
+  }
+  function formatNumber(value) { return Number(value).toLocaleString(getLocale()); }
+  function exerciseCountLabel(count) {
+    if (getLanguage() !== "ru") return count + " exercise" + (count === 1 ? "" : "s");
+    const mod10 = count % 10, mod100 = count % 100;
+    const word = mod10 === 1 && mod100 !== 11 ? "упражнение"
+      : mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14) ? "упражнения"
+      : "упражнений";
+    return count + " " + word;
+  }
+  function exerciseDisplayName(name) { return getLanguage() === "ru" ? (EXERCISE_RU[name] || name) : name; }
+  function localizedNote(note) { return getLanguage() === "ru" ? (NOTE_RU[note] || note) : note; }
+  function localizedRule(rule) { return getLanguage() === "ru" ? (RULE_RU[rule] || rule) : rule; }
+  function categoryDisplay(category) { return t(CATEGORY_KEYS[category] || category); }
+  function dayDisplay(day) { return getLanguage() === "ru" ? (DAY_RU[day] || day) : day; }
+  function templateDisplayName(item) {
+    if (!item) return t("readyTitle");
+    if (getLanguage() !== "ru") return item.name;
+    return TEMPLATE_RU[item.id || item.templateId] || WORKOUT_RU[item.name] || item.name;
+  }
+  function phaseDisplay(type) {
+    if (type === "Hard PR") return t("phaseHardPR");
+    if (type === "Easy") return t("phaseEasy");
+    if (type === "Easy / Hard") return t("phaseTransition");
+    return t("phaseHard");
+  }
+  function canonicalExerciseName(value) {
+    const normalized = value.trim().toLowerCase();
+    const match = data.referencePRs.find(pr =>
+      pr.name.toLowerCase() === normalized || exerciseDisplayName(pr.name).toLowerCase() === normalized
+    );
+    return match ? match.name : value.trim();
+  }
+  function applyStaticTranslations() {
+    document.documentElement.lang = getLanguage();
+    $$("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+    $$("[data-i18n-placeholder]").forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+    $$("[data-i18n-title]").forEach(el => { el.title = t(el.dataset.i18nTitle); });
+    $$("[data-i18n-aria-label]").forEach(el => { el.setAttribute("aria-label", t(el.dataset.i18nAriaLabel)); });
+    $("quickLanguage").value = getLanguage();
+    $("languageSelect").value = getLanguage();
+  }
+  function refreshLocalizedUI() {
+    applyStaticTranslations();
+    renderTemplateOptions();
+    renderExerciseSuggestions();
+    if (draft) {
+      syncDraftFields();
+      renderExerciseList();
+    }
+    renderDashboard();
+    renderHistory();
+    renderProgress();
+  }
+  function setLanguage(language) {
+    data.settings.language = language === "ru" ? "ru" : "en";
+    persist();
+    refreshLocalizedUI();
+    toast(t("languageChanged"));
   }
   function loadData() {
     try {
@@ -1444,44 +2208,50 @@
 
   function renderDashboard() {
     const today = getTodayTemplate();
-    const formatter = new Intl.DateTimeFormat("en", { weekday:"long", day:"numeric", month:"long" });
+    const formatter = new Intl.DateTimeFormat(getLocale(), { weekday:"long", day:"numeric", month:"long" });
     $("todayLabel").textContent = formatter.format(new Date());
-    $("todayWorkoutTitle").textContent = today ? today.name : "Ready to train?";
+    $("todayWorkoutTitle").textContent = today ? templateDisplayName(today) : t("readyTitle");
     $("todayWorkoutText").textContent = today
-      ? `${today.exercises.length} exercises. Focus on controlled reps and small, measurable progress.`
-      : "Log your session and keep your progression visible.";
+      ? t("workoutFocus", { count:exerciseCountLabel(today.exercises.length) })
+      : t("progressionVisible");
 
     const weekStart = startOfWeek();
     const weekWorkouts = data.workouts.filter(w => new Date(w.date + "T12:00:00") >= weekStart);
     $("weekSessions").textContent = weekWorkouts.length;
     const volume = weekWorkouts.reduce((sum, w) => sum + workoutVolume(w), 0);
-    $("weekVolume").textContent = `${Math.round(volume).toLocaleString()} ${getUnit()}`;
+    $("weekVolume").textContent = formatNumber(Math.round(volume)) + " " + unitLabel();
 
     const prs = calculatePRs();
     const trackedPRs = new Set([...Object.keys(prs), ...data.referencePRs.map(pr => pr.name)]);
     $("totalPRs").textContent = trackedPRs.size;
     renderTrainingPlan();
 
-    $("splitList").innerHTML = data.templates.map(t => `
+    $("splitList").innerHTML = data.templates.map(template => `
       <div class="list-item">
         <div>
-          <strong>${escapeHtml(t.name)}</strong>
-          <small>${escapeHtml(t.day)} · ${t.exercises.length} exercises</small>
+          <strong>${escapeHtml(templateDisplayName(template))}</strong>
+          <small>${escapeHtml(dayDisplay(template.day))} · ${escapeHtml(exerciseCountLabel(template.exercises.length))}</small>
         </div>
-        <button class="btn btn-small" data-start-template="${escapeHtml(t.id)}">Start</button>
+        <button class="btn btn-small" data-start-template="${escapeHtml(template.id)}">${escapeHtml(t("start"))}</button>
       </div>
     `).join("");
 
     const recent = [...data.workouts].sort((a,b) => b.date.localeCompare(a.date)).slice(0,3);
-    $("recentList").innerHTML = recent.length ? recent.map(w => `
-      <div class="list-item">
-        <div>
-          <strong>${escapeHtml(w.name)}</strong>
-          <small>${formatDate(w.date)} · ${Math.round(workoutVolume(w)).toLocaleString()} ${getUnit()} volume</small>
+    $("recentList").innerHTML = recent.length ? recent.map(workout => {
+      const volumeText = t("volumeValue", {
+        value:formatNumber(Math.round(workoutVolume(workout))),
+        unit:unitLabel()
+      });
+      return `
+        <div class="list-item">
+          <div>
+            <strong>${escapeHtml(templateDisplayName(workout))}</strong>
+            <small>${formatDate(workout.date)} · ${escapeHtml(volumeText)}</small>
+          </div>
+          <span class="tag">${escapeHtml(exerciseCountLabel(workout.exercises.length))}</span>
         </div>
-        <span class="tag">${w.exercises.length} exercises</span>
-      </div>
-    `).join("") : `<div class="empty">No saved workouts yet. Your first session will appear here.</div>`;
+      `;
+    }).join("") : `<div class="empty">${escapeHtml(t("noSavedWorkouts"))}</div>`;
 
     $$("[data-start-template]").forEach(btn => {
       btn.onclick = () => beginWorkout(btn.dataset.startTemplate);
@@ -1489,13 +2259,13 @@
   }
 
   function planDate(value) {
-    return new Intl.DateTimeFormat("en", { day:"numeric", month:"short" }).format(new Date(value + "T12:00:00"));
+    return new Intl.DateTimeFormat(getLocale(), { day:"numeric", month:"short" }).format(new Date(value + "T12:00:00"));
   }
   function phaseGuidance(type) {
-    if (type === "Hard PR") return "Choose only 1–2 exercises for a PR attempt. Beat either weight or reps, not every exercise in the session.";
-    if (type === "Easy") return "Reduce working weights by 20–30%, use 12–15 clean reps, avoid failure, and prioritize recovery.";
-    if (type === "Easy / Hard") return "Treat this as a transition week. Use recovery and performance to decide whether each exercise stays easy or returns to working weight.";
-    return "Use your working weight for 10–12 reps. Increase only after 3 × 12 with good technique; the final isolation set may reach failure.";
+    if (type === "Hard PR") return t("hardPrGuidance");
+    if (type === "Easy") return t("easyGuidance");
+    if (type === "Easy / Hard") return t("transitionGuidance");
+    return t("hardGuidance");
   }
   function renderTrainingPlan() {
     const plan = data.trainingPlan || DEFAULT_DATA.trainingPlan;
@@ -1506,15 +2276,13 @@
       ? cycles.find(c => c.week === current.week + 1)
       : cycles.find(c => c.start > today);
 
-    $("cyclePhase").textContent = current ? `${current.type} · Week ${current.week}` : "No active cycle";
-    $("cycleDates").textContent = current ? `${planDate(current.start)} – ${planDate(current.end)}` : "Calendar ends 4 Oct 2026";
-    $("nextCyclePhase").textContent = next ? `${next.type} · Week ${next.week}` : "Plan complete";
-    $("nextCycleDates").textContent = next ? `${planDate(next.start)} – ${planDate(next.end)}` : "Update the cycle calendar";
-    $("cycleGuidance").textContent = current
-      ? phaseGuidance(current.type)
-      : "There is no phase scheduled for today. Update the training cycle before applying progression rules.";
+    $("cyclePhase").textContent = current ? phaseDisplay(current.type) + " · " + t("week") + " " + current.week : t("noActiveCycle");
+    $("cycleDates").textContent = current ? planDate(current.start) + " – " + planDate(current.end) : t("calendarEnds");
+    $("nextCyclePhase").textContent = next ? phaseDisplay(next.type) + " · " + t("week") + " " + next.week : t("planComplete");
+    $("nextCycleDates").textContent = next ? planDate(next.start) + " – " + planDate(next.end) : t("updateCycle");
+    $("cycleGuidance").textContent = current ? phaseGuidance(current.type) : t("noPhaseToday");
     $("trainingRules").innerHTML = (plan.rules || []).map(rule =>
-      `<div class="rule-item">${escapeHtml(rule)}</div>`
+      `<div class="rule-item">${escapeHtml(localizedRule(rule))}</div>`
     ).join("");
   }
 
@@ -1555,34 +2323,36 @@
     $("workoutNotes").value = draft.notes;
   }
   function renderTemplateOptions() {
-    $("workoutTemplate").innerHTML = data.templates.map(t =>
-      `<option value="${escapeHtml(t.id)}">${escapeHtml(t.name)} · ${escapeHtml(t.day)}</option>`
+    const current = $("workoutTemplate").value;
+    $("workoutTemplate").innerHTML = data.templates.map(template =>
+      `<option value="${escapeHtml(template.id)}">${escapeHtml(templateDisplayName(template))} · ${escapeHtml(dayDisplay(template.day))}</option>`
     ).join("");
+    if (data.templates.some(template => template.id === current)) $("workoutTemplate").value = current;
   }
   function renderExerciseList() {
     if (!draft) return;
-    $("exerciseList").innerHTML = draft.exercises.map((ex, exIndex) => `
+    $("exerciseList").innerHTML = draft.exercises.map((exercise, exIndex) => `
       <article class="exercise-card" data-exercise-index="${exIndex}">
         <div class="exercise-head">
           <div>
-            <h3>${escapeHtml(ex.name)}</h3>
-            <small class="muted">${escapeHtml(ex.category)}</small>
+            <h3>${escapeHtml(exerciseDisplayName(exercise.name))}</h3>
+            <small class="muted">${escapeHtml(categoryDisplay(exercise.category))}</small>
           </div>
-          <button class="icon-btn" data-remove-exercise="${exIndex}" title="Remove exercise">×</button>
+          <button class="icon-btn" data-remove-exercise="${exIndex}" title="${escapeHtml(t("removeExercise"))}">×</button>
         </div>
         <div class="set-table">
-          <div class="th">Set</div><div class="th">Weight</div><div class="th">Reps</div><div class="th">RIR</div><div></div>
-          ${ex.sets.map((set, setIndex) => `
+          <div class="th">${escapeHtml(t("set"))}</div><div class="th">${escapeHtml(t("weight"))}</div><div class="th">${escapeHtml(t("reps"))}</div><div class="th">RIR</div><div></div>
+          ${exercise.sets.map((set, setIndex) => `
             <div class="set-num">${setIndex + 1}</div>
-            <input type="number" min="0" step="0.5" value="${escapeHtml(set.weight)}" placeholder="${getUnit()}" data-field="weight" data-ex="${exIndex}" data-set="${setIndex}">
+            <input type="number" min="0" step="0.5" value="${escapeHtml(set.weight)}" placeholder="${escapeHtml(unitLabel())}" data-field="weight" data-ex="${exIndex}" data-set="${setIndex}">
             <input type="number" min="0" step="1" value="${escapeHtml(set.reps)}" placeholder="12" data-field="reps" data-ex="${exIndex}" data-set="${setIndex}">
             <input type="number" min="0" max="10" step="1" value="${escapeHtml(set.rir)}" placeholder="2" data-field="rir" data-ex="${exIndex}" data-set="${setIndex}">
-            <button class="icon-btn" data-remove-set="${exIndex}:${setIndex}" title="Remove set">−</button>
+            <button class="icon-btn" data-remove-set="${exIndex}:${setIndex}" title="${escapeHtml(t("removeSet"))}">−</button>
           `).join("")}
         </div>
         <div class="exercise-footer">
-          <small class="muted" data-prev-best="${escapeHtml(ex.name)}">${previousBestText(ex.name)}</small>
-          <button class="btn btn-small" data-add-set="${exIndex}">+ Set</button>
+          <small class="muted" data-prev-best="${escapeHtml(exercise.name)}">${escapeHtml(previousBestText(exercise.name))}</small>
+          <button class="btn btn-small" data-add-set="${exIndex}">${escapeHtml(t("addSet"))}</button>
         </div>
       </article>
     `).join("");
@@ -1593,14 +2363,14 @@
       });
     });
     $$("[data-add-set]").forEach(btn => btn.onclick = () => {
-      const ex = draft.exercises[number(btn.dataset.addSet)];
-      ex.sets.push(createSet(ex.sets.length));
+      const exercise = draft.exercises[number(btn.dataset.addSet)];
+      exercise.sets.push(createSet(exercise.sets.length));
       renderExerciseList();
     });
     $$("[data-remove-set]").forEach(btn => btn.onclick = () => {
       const [exIndex, setIndex] = btn.dataset.removeSet.split(":").map(Number);
       const sets = draft.exercises[exIndex].sets;
-      if (sets.length === 1) return toast("Each exercise needs at least one set");
+      if (sets.length === 1) return toast(t("atLeastOneSet"));
       sets.splice(setIndex, 1);
       renderExerciseList();
     });
@@ -1611,19 +2381,19 @@
   }
   function referenceLoadText(pr) {
     if (!pr) return "";
-    if (!pr.weight) return pr.reps ? `${pr.reps} reps` : "Load not recorded";
+    if (!pr.weight) return pr.reps ? pr.reps + " " + t("repetitions") : t("loadNotRecorded");
     const prefix = pr.load === "added" ? "+" : "";
-    const suffix = pr.load === "per side" ? " / side" : pr.load === "per dumbbell" ? " / dumbbell" : "";
-    return `${prefix}${pr.weight} kg${suffix}${pr.reps ? ` × ${pr.reps}` : ""}`;
+    const suffix = pr.load === "per side" ? t("perSide") : pr.load === "per dumbbell" ? t("perDumbbell") : "";
+    return prefix + pr.weight + " " + t("kgShort") + suffix + (pr.reps ? " × " + pr.reps : "");
   }
   function previousBestText(exerciseName) {
-    const logged = exerciseEntries(exerciseName).filter(e => e.source === "workout" && number(e.e1rm) > 0);
+    const logged = exerciseEntries(exerciseName).filter(entry => entry.source === "workout" && number(entry.e1rm) > 0);
     if (logged.length) {
-      const best = Math.max(...logged.map(e => e.e1rm));
-      return `Previous logged e1RM: ${best.toFixed(1)} ${getUnit()}`;
+      const best = Math.max(...logged.map(entry => entry.e1rm));
+      return t("previousLoggedE1rm", { value:best.toFixed(1), unit:unitLabel() });
     }
     const reference = data.referencePRs.find(pr => pr.name === exerciseName);
-    return reference ? `Reference best: ${referenceLoadText(reference)}` : "No previous data";
+    return reference ? t("referenceBest", { value:referenceLoadText(reference) }) : t("noPreviousData");
   }
 
   function updateDraftFromForm() {
@@ -1644,8 +2414,8 @@
         .filter(set => set.weight > 0 && set.reps > 0)
     })).filter(ex => ex.sets.length);
 
-    if (!draft.date) return toast("Choose a workout date");
-    if (!validExercises.length) return toast("Enter at least one completed set");
+    if (!draft.date) return toast(t("chooseWorkoutDate"));
+    if (!validExercises.length) return toast(t("enterCompletedSet"));
 
     const saved = {
       ...draft,
@@ -1656,7 +2426,7 @@
     };
     data.workouts.push(saved);
     persist();
-    toast("Workout saved");
+    toast(t("workoutSaved"));
     draft = makeDraft(data.templates.find(t => t.id === saved.templateId) || getTodayTemplate());
     syncDraftFields();
     renderExerciseList();
@@ -1671,7 +2441,7 @@
     draft = makeDraft(template);
     syncDraftFields();
     renderExerciseList();
-    toast("Workout reset");
+    toast(t("workoutReset"));
   }
 
   function calculatePRs() {
@@ -1685,55 +2455,55 @@
 
   function renderHistory() {
     const workouts = [...data.workouts].sort((a,b) => (b.date + b.savedAt).localeCompare(a.date + a.savedAt));
-    $("historyList").innerHTML = workouts.length ? workouts.map(w => `
-      <article class="list-item history-session" data-session="${escapeHtml(w.id)}" style="display:block">
+    $("historyList").innerHTML = workouts.length ? workouts.map(workout => `
+      <article class="list-item history-session" data-session="${escapeHtml(workout.id)}" style="display:block">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
           <div>
-            <strong>${escapeHtml(w.name)}</strong>
-            <small>${formatDate(w.date)} · ${w.duration || "—"} min · readiness ${w.readiness || "—"}/10</small>
+            <strong>${escapeHtml(templateDisplayName(workout))}</strong>
+            <small>${formatDate(workout.date)} · ${workout.duration || "—"} ${escapeHtml(t("minShort"))} · ${escapeHtml(t("readinessShort"))} ${workout.readiness || "—"}/10</small>
           </div>
-          <span class="tag">${Math.round(workoutVolume(w)).toLocaleString()} ${getUnit()}</span>
+          <span class="tag">${formatNumber(Math.round(workoutVolume(workout)))} ${escapeHtml(unitLabel())}</span>
         </div>
-        <div class="session-details" id="details-${escapeHtml(w.id)}">
-          ${w.exercises.map(ex => `
+        <div class="session-details" id="details-${escapeHtml(workout.id)}">
+          ${workout.exercises.map(exercise => `
             <div style="margin-bottom:12px">
-              <strong style="font-size:.84rem">${escapeHtml(ex.name)}</strong>
+              <strong style="font-size:.84rem">${escapeHtml(exerciseDisplayName(exercise.name))}</strong>
               <table class="mini-table">
-                ${ex.sets.map((set,i) => `<tr><td>Set ${i+1}</td><td>${set.weight} ${getUnit()} × ${set.reps} · RIR ${set.rir}</td></tr>`).join("")}
+                ${exercise.sets.map((set,index) => `<tr><td>${escapeHtml(t("set"))} ${index+1}</td><td>${set.weight} ${escapeHtml(unitLabel())} × ${set.reps} · RIR ${set.rir}</td></tr>`).join("")}
               </table>
             </div>
           `).join("")}
-          ${w.notes ? `<div class="notice">${escapeHtml(w.notes)}</div>` : ""}
+          ${workout.notes ? `<div class="notice">${escapeHtml(workout.notes)}</div>` : ""}
           <div class="inline-actions" style="margin-top:12px">
-            <button class="btn btn-small" data-repeat-session="${escapeHtml(w.id)}">Repeat workout</button>
-            <button class="btn btn-small btn-danger" data-delete-session="${escapeHtml(w.id)}">Delete</button>
+            <button class="btn btn-small" data-repeat-session="${escapeHtml(workout.id)}">${escapeHtml(t("repeatWorkout"))}</button>
+            <button class="btn btn-small btn-danger" data-delete-session="${escapeHtml(workout.id)}">${escapeHtml(t("delete"))}</button>
           </div>
         </div>
       </article>
-    `).join("") : `<div class="empty">No history yet. Save a workout to begin tracking progress.</div>`;
+    `).join("") : `<div class="empty">${escapeHtml(t("noHistory"))}</div>`;
 
     $$("[data-session]").forEach(card => {
-      card.addEventListener("click", e => {
-        if (e.target.closest("button")) return;
-        $(`details-${card.dataset.session}`).classList.toggle("open");
+      card.addEventListener("click", event => {
+        if (event.target.closest("button")) return;
+        $("details-" + card.dataset.session).classList.toggle("open");
       });
     });
     $$("[data-delete-session]").forEach(btn => btn.onclick = () => {
       const id = btn.dataset.deleteSession;
-      if (!confirm("Delete this workout permanently?")) return;
-      data.workouts = data.workouts.filter(w => w.id !== id);
+      if (!confirm(t("deleteWorkoutConfirm"))) return;
+      data.workouts = data.workouts.filter(workout => workout.id !== id);
       persist();
       renderHistory(); renderDashboard(); renderProgressSelectors(); drawProgressChart();
-      toast("Workout deleted");
+      toast(t("workoutDeleted"));
     });
     $$("[data-repeat-session]").forEach(btn => btn.onclick = () => {
-      const saved = data.workouts.find(w => w.id === btn.dataset.repeatSession);
+      const saved = data.workouts.find(workout => workout.id === btn.dataset.repeatSession);
       if (!saved) return;
       draft = clone(saved);
       draft.id = uid("workout");
       draft.date = todayISO();
       draft.savedAt = undefined;
-      draft.exercises.forEach(ex => ex.sets.forEach(set => set.id = uid("set")));
+      draft.exercises.forEach(exercise => exercise.sets.forEach(set => set.id = uid("set")));
       syncDraftFields();
       renderExerciseList();
       navigate("logView");
@@ -1742,10 +2512,10 @@
 
   function allExerciseNames() {
     const names = new Set();
-    data.templates.forEach(t => t.exercises.forEach(ex => names.add(ex.name)));
-    data.workouts.forEach(w => w.exercises.forEach(ex => names.add(ex.name)));
+    data.templates.forEach(template => template.exercises.forEach(exercise => names.add(exercise.name)));
+    data.workouts.forEach(workout => workout.exercises.forEach(exercise => names.add(exercise.name)));
     data.referencePRs.forEach(pr => names.add(pr.name));
-    return [...names].sort();
+    return [...names].sort((a,b) => exerciseDisplayName(a).localeCompare(exerciseDisplayName(b), getLocale()));
   }
   function exerciseEntries(name) {
     const entries = [];
@@ -1758,14 +2528,14 @@
         source: "reference"
       });
     });
-    data.workouts.forEach(w => w.exercises.filter(ex => ex.name === name).forEach(ex => {
-      const valid = ex.sets.filter(set => number(set.weight) > 0 && number(set.reps) > 0);
+    data.workouts.forEach(workout => workout.exercises.filter(exercise => exercise.name === name).forEach(exercise => {
+      const valid = exercise.sets.filter(set => number(set.weight) > 0 && number(set.reps) > 0);
       if (!valid.length) return;
       entries.push({
-        date: w.date,
-        weight: Math.max(...valid.map(s => number(s.weight))),
-        e1rm: Math.max(...valid.map(s => e1rm(number(s.weight), number(s.reps)))),
-        volume: valid.reduce((sum,s) => sum + number(s.weight) * number(s.reps), 0),
+        date: workout.date,
+        weight: Math.max(...valid.map(set => number(set.weight))),
+        e1rm: Math.max(...valid.map(set => e1rm(number(set.weight), number(set.reps)))),
+        volume: valid.reduce((sum,set) => sum + number(set.weight) * number(set.reps), 0),
         source: "workout"
       });
     }));
@@ -1774,41 +2544,49 @@
   function renderProgressSelectors() {
     const names = allExerciseNames();
     const current = $("progressExercise").value;
-    $("progressExercise").innerHTML = names.map(name => `<option>${escapeHtml(name)}</option>`).join("");
+    $("progressExercise").innerHTML = names.map(name =>
+      `<option value="${escapeHtml(name)}">${escapeHtml(exerciseDisplayName(name))}</option>`
+    ).join("");
     if (names.includes(current)) $("progressExercise").value = current;
   }
   function renderReferencePRFilters() {
     const categories = ["All", ...new Set(data.referencePRs.map(pr => pr.category))];
     const current = $("prCategory").value || "All";
     $("prCategory").innerHTML = categories.map(category =>
-      `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+      `<option value="${escapeHtml(category)}">${escapeHtml(categoryDisplay(category))}</option>`
     ).join("");
     $("prCategory").value = categories.includes(current) ? current : "All";
   }
   function renderReferencePRs() {
     const category = $("prCategory").value || "All";
-    const query = $("prSearch").value.trim().toLowerCase();
+    const query = $("prSearch").value.trim().toLocaleLowerCase(getLocale());
     const matches = data.referencePRs
       .filter(pr => category === "All" || pr.category === category)
-      .filter(pr => !query || `${pr.name} ${pr.category} ${pr.note || ""}`.toLowerCase().includes(query))
-      .sort((a,b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+      .filter(pr => {
+        const searchable = [
+          pr.name, exerciseDisplayName(pr.name), pr.category, categoryDisplay(pr.category),
+          pr.note || "", localizedNote(pr.note || "")
+        ].join(" ").toLocaleLowerCase(getLocale());
+        return !query || searchable.includes(query);
+      })
+      .sort((a,b) => exerciseDisplayName(a.name).localeCompare(exerciseDisplayName(b.name), getLocale()));
 
     $("prList").innerHTML = matches.length ? matches.map(pr => `
       <div class="list-item">
         <div>
-          <strong>${escapeHtml(pr.name)}</strong>
-          <small>${escapeHtml(pr.category)}${pr.note ? ` · ${escapeHtml(pr.note)}` : ""}</small>
+          <strong>${escapeHtml(exerciseDisplayName(pr.name))}</strong>
+          <small>${escapeHtml(categoryDisplay(pr.category))}${pr.note ? " · " + escapeHtml(localizedNote(pr.note)) : ""}</small>
         </div>
         <div class="pr-value">
           <span class="tag">${escapeHtml(referenceLoadText(pr))}</span>
           <small>${formatDate(pr.date || data.trainingPlan.referenceDate)}</small>
         </div>
       </div>
-    `).join("") : `<div class="empty">No reference PRs match this filter.</div>`;
+    `).join("") : `<div class="empty">${escapeHtml(t("noReferenceMatch"))}</div>`;
   }
   function renderExerciseSuggestions() {
     $("exerciseSuggestions").innerHTML = data.referencePRs.map(pr =>
-      `<option value="${escapeHtml(pr.name)}"></option>`
+      `<option value="${escapeHtml(exerciseDisplayName(pr.name))}"></option>`
     ).join("");
   }
   function renderProgress() {
@@ -1835,7 +2613,7 @@
 
     if (!entries.length) {
       ctx.fillStyle = text; ctx.font = "14px system-ui"; ctx.textAlign = "center";
-      ctx.fillText("Not enough data yet", cssWidth/2, cssHeight/2);
+      ctx.fillText(t("notEnoughData"), cssWidth/2, cssHeight/2);
       return;
     }
 
@@ -1880,7 +2658,7 @@
     const name = $("progressExercise").value;
     const metric = $("progressMetric").value || "e1rm";
     const entries = exerciseEntries(name).filter(entry => Number.isFinite(entry[metric]) && entry[metric] > 0);
-    const unit = getUnit();
+    const unit = unitLabel();
     drawLineChart($("progressCanvas"), entries, metric, v => Math.round(v).toString());
 
     if (!entries.length) {
@@ -1897,7 +2675,7 @@
     const change = first ? ((latest-first)/first)*100 : 0;
     $("selectedBest").textContent = `${best.toFixed(metric === "e1rm" ? 1 : 0)}${suffix}`;
     $("selectedLatest").textContent = `${latest.toFixed(metric === "e1rm" ? 1 : 0)}${suffix}`;
-    $("selectedChange").textContent = entries.length === 1 ? "Baseline" : `${change >= 0 ? "+" : ""}${change.toFixed(1)}%`;
+    $("selectedChange").textContent = entries.length === 1 ? t("baseline") : `${change >= 0 ? "+" : ""}${change.toFixed(1)}%`;
   }
 
   function drawBodyweightChart() {
@@ -1905,16 +2683,16 @@
     drawLineChart($("bodyweightCanvas"), entries, "value", v => v.toFixed(1));
   }
   function renderBodyweightList() {
-    const entries = [...data.bodyweight].sort((a,b)=>b.date.localeCompare(a.date));
-    $("bodyweightList").innerHTML = entries.length ? entries.slice(0,6).map(e => `
+    const entries = [...data.bodyweight].sort((a,b) => b.date.localeCompare(a.date));
+    $("bodyweightList").innerHTML = entries.length ? entries.slice(0,6).map(entry => `
       <div class="list-item">
-        <div><strong>${number(e.value).toFixed(1)} ${getUnit()}</strong><small>${formatDate(e.date)}${e.note ? ` · ${escapeHtml(e.note)}` : ""}</small></div>
-        <button class="icon-btn" data-delete-weight="${escapeHtml(e.id)}">×</button>
+        <div><strong>${number(entry.value).toFixed(1)} ${escapeHtml(unitLabel())}</strong><small>${formatDate(entry.date)}${entry.note ? " · " + escapeHtml(entry.note) : ""}</small></div>
+        <button class="icon-btn" data-delete-weight="${escapeHtml(entry.id)}" title="${escapeHtml(t("deleteBodyweight"))}">×</button>
       </div>
-    `).join("") : `<div class="empty">No bodyweight entries yet.</div>`;
+    `).join("") : `<div class="empty">${escapeHtml(t("noBodyweight"))}</div>`;
     $$("[data-delete-weight]").forEach(btn => btn.onclick = () => {
-      data.bodyweight = data.bodyweight.filter(e => e.id !== btn.dataset.deleteWeight);
-      persist(); renderProgress(); toast("Bodyweight entry deleted");
+      data.bodyweight = data.bodyweight.filter(entry => entry.id !== btn.dataset.deleteWeight);
+      persist(); renderProgress(); toast(t("bodyweightDeleted"));
     });
   }
 
@@ -1922,32 +2700,32 @@
     const date = $("bodyweightDate").value;
     const value = number($("bodyweightValue").value);
     const note = $("bodyweightNote").value.trim();
-    if (!date || value <= 0) return toast("Enter a valid date and weight");
+    if (!date || value <= 0) return toast(t("invalidDateWeight"));
     data.bodyweight.push({ id:uid("weight"), date, value, note });
     persist();
     closeModal("bodyweightModal");
     $("bodyweightValue").value = "";
     $("bodyweightNote").value = "";
     renderProgress();
-    toast("Bodyweight saved");
+    toast(t("bodyweightSaved"));
   }
 
   function openModal(id) { $(id).classList.add("open"); }
   function closeModal(id) { $(id).classList.remove("open"); }
 
   function addExercise() {
-    const name = $("newExerciseName").value.trim();
+    const name = canonicalExerciseName($("newExerciseName").value);
     const category = $("newExerciseCategory").value;
-    if (!name) return toast("Enter an exercise name");
+    if (!name) return toast(t("enterExerciseName"));
     const setCount = Math.max(1, number(data.settings.defaultSets) || 3);
     draft.exercises.push({
       id:uid("exercise"), name, category,
-      sets:Array.from({length:setCount},(_,i)=>createSet(i))
+      sets:Array.from({length:setCount},(_,index)=>createSet(index))
     });
     $("newExerciseName").value = "";
     closeModal("exerciseModal");
     renderExerciseList();
-    toast("Exercise added");
+    toast(t("exerciseAdded"));
   }
 
   function exportData() {
@@ -1976,25 +2754,27 @@
       };
       persist();
       boot();
-      toast("Backup imported");
+      toast(t("backupImported"));
     } catch {
-      toast("Could not import this file");
+      toast(t("importFailed"));
     }
   }
 
   function saveSettings() {
     data.settings.unit = $("unitSelect").value;
     data.settings.defaultSets = Math.max(1, number($("defaultSets").value) || 3);
+    data.settings.language = $("languageSelect").value === "ru" ? "ru" : "en";
     persist();
-    renderDashboard(); renderExerciseList(); renderProgress();
-    toast("Preferences saved");
+    refreshLocalizedUI();
+    toast(t("preferencesSaved"));
   }
 
   function wireEvents() {
     $$(".nav button").forEach(btn => btn.onclick = () => navigate(btn.dataset.view));
+    $("quickLanguage").onchange = () => setLanguage($("quickLanguage").value);
     $("startTodayBtn").onclick = () => beginWorkout(getTodayTemplate().id);
     $("workoutTemplate").onchange = () => {
-      const template = data.templates.find(t => t.id === $("workoutTemplate").value);
+      const template = data.templates.find(item => item.id === $("workoutTemplate").value);
       if (!template) return;
       const currentDate = $("workoutDate").value || todayISO();
       draft = makeDraft(template);
@@ -2013,7 +2793,8 @@
     $("prCategory").onchange = renderReferencePRs;
     $("prSearch").oninput = renderReferencePRs;
     $("newExerciseName").addEventListener("change", () => {
-      const match = data.referencePRs.find(pr => pr.name === $("newExerciseName").value.trim());
+      const canonical = canonicalExerciseName($("newExerciseName").value);
+      const match = data.referencePRs.find(pr => pr.name === canonical);
       if (match) $("newExerciseCategory").value = match.category;
     });
     $("addBodyweightBtn").onclick = () => {
@@ -2023,17 +2804,20 @@
     $("confirmBodyweightBtn").onclick = saveBodyweight;
     $("saveSettingsBtn").onclick = saveSettings;
     $("exportBtn").onclick = exportData;
-    $("importInput").onchange = e => e.target.files[0] && importData(e.target.files[0]);
+    $("importInput").onchange = event => event.target.files[0] && importData(event.target.files[0]);
     $("clearDataBtn").onclick = () => {
-      if (!confirm("Clear every workout, bodyweight entry, and preference?")) return;
+      if (!confirm(t("clearConfirm"))) return;
+      const language = getLanguage();
       localStorage.removeItem(STORAGE_KEY);
       data = clone(DEFAULT_DATA);
+      data.settings.language = language;
+      draft = null;
       boot();
-      toast("All data cleared");
+      toast(t("allDataCleared"));
     };
     $$("[data-close-modal]").forEach(btn => btn.onclick = () => closeModal(btn.dataset.closeModal));
-    $$(".modal").forEach(modal => modal.addEventListener("click", e => {
-      if (e.target === modal) closeModal(modal.id);
+    $$(".modal").forEach(modal => modal.addEventListener("click", event => {
+      if (event.target === modal) closeModal(modal.id);
     }));
     window.addEventListener("resize", () => {
       if ($("progressView").classList.contains("active")) {
@@ -2044,10 +2828,13 @@
 
   function boot() {
     persist();
+    applyStaticTranslations();
     renderTemplateOptions();
     renderExerciseSuggestions();
     $("unitSelect").value = data.settings.unit;
     $("defaultSets").value = data.settings.defaultSets;
+    $("languageSelect").value = getLanguage();
+    $("quickLanguage").value = getLanguage();
     if (!draft) draft = makeDraft(getTodayTemplate());
     syncDraftFields();
     renderExerciseList();
@@ -2056,6 +2843,7 @@
     renderProgressSelectors();
     renderProgress();
   }
+
 
   wireEvents();
   boot();
