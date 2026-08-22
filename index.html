@@ -203,6 +203,14 @@
       border: 1px solid rgba(124,200,255,.25); background: rgba(124,200,255,.08);
       color: #cbe9ff; border-radius: 14px; padding: 12px 13px; font-size: .82rem; line-height: 1.5;
     }
+    .plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .plan-stat { border: 1px solid var(--border); background: #101316; border-radius: 14px; padding: 12px; }
+    .plan-stat small { display: block; color: var(--muted); margin-bottom: 5px; }
+    .plan-stat strong { display: block; font-size: 1rem; }
+    .rule-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .rule-item { border: 1px solid var(--border); border-radius: 12px; padding: 10px; color: var(--muted); font-size: .78rem; line-height: 1.45; }
+    .pr-value { text-align: right; min-width: 112px; }
+    .pr-value small { display: block; margin-top: 5px; color: var(--muted); }
     .toast {
       position: fixed; top: 16px; left: 50%; transform: translate(-50%, -16px);
       background: #f4f7f8; color: #111; padding: 10px 14px; border-radius: 999px;
@@ -231,6 +239,7 @@
       .card, .card.wide { grid-column: 1 / -1; }
       .grid { gap: 10px; }
       .form-grid { grid-template-columns: 1fr; }
+      .plan-grid, .rule-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 470px) {
       .app-shell { padding-left: 12px; padding-right: 12px; }
@@ -285,9 +294,25 @@
         </article>
         <article class="card">
           <div class="metric" id="totalPRs">0</div>
-          <div class="metric-label">Personal records</div>
-          <div class="metric-change">Based on estimated 1RM</div>
+          <div class="metric-label">Tracked personal records</div>
+          <div class="metric-change">Imported references + logged bests</div>
         </article>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h2>Current training block</h2>
+          <p>Your hard, PR, and recovery calendar</p>
+        </div>
+      </div>
+      <div class="card full">
+        <div class="plan-grid">
+          <div class="plan-stat"><small>Current phase</small><strong id="cyclePhase">—</strong><span class="muted" id="cycleDates">—</span></div>
+          <div class="plan-stat"><small>Next phase</small><strong id="nextCyclePhase">—</strong><span class="muted" id="nextCycleDates">—</span></div>
+          <div class="plan-stat"><small>Progression</small><strong>Upper +2.5 kg</strong><span class="muted">Lower +5 kg</span></div>
+        </div>
+        <div class="notice" id="cycleGuidance" style="margin-top:10px">Loading the current training phase…</div>
+        <div class="rule-grid" id="trainingRules"></div>
       </div>
 
       <div class="section-head">
@@ -411,6 +436,26 @@
 
       <div class="section-head">
         <div>
+          <h2>Reference PR library</h2>
+          <p>Imported from your exercise notes dated 14 July 2026</p>
+        </div>
+      </div>
+      <div class="card full">
+        <div class="form-grid">
+          <div>
+            <label for="prCategory">Muscle group</label>
+            <select id="prCategory"></select>
+          </div>
+          <div>
+            <label for="prSearch">Search exercise</label>
+            <input id="prSearch" type="search" placeholder="e.g. pulldown, squat, curl" />
+          </div>
+        </div>
+        <div id="prList" class="list" style="margin-top:12px"></div>
+      </div>
+
+      <div class="section-head">
+        <div>
           <h2>Bodyweight</h2>
           <p>Useful for your mass-gain goal</p>
         </div>
@@ -499,12 +544,14 @@
         <button class="icon-btn" data-close-modal="exerciseModal">×</button>
       </div>
       <label for="newExerciseName">Exercise name</label>
-      <input id="newExerciseName" placeholder="e.g. Lat pulldown" />
+      <input id="newExerciseName" list="exerciseSuggestions" placeholder="e.g. Lat pulldown" />
+      <datalist id="exerciseSuggestions"></datalist>
       <div class="spacer"></div>
       <label for="newExerciseCategory">Muscle group</label>
       <select id="newExerciseCategory">
         <option>Chest</option><option>Back</option><option>Legs</option><option>Shoulders</option>
-        <option>Biceps</option><option>Triceps</option><option>Core</option><option>Other</option>
+        <option>Biceps</option><option>Triceps</option><option>Neck</option><option>Forearms</option>
+        <option>Core</option><option>Other</option>
       </select>
       <div class="spacer"></div>
       <button class="btn btn-primary" id="confirmAddExerciseBtn">Add exercise</button>
@@ -538,45 +585,774 @@
 <script>
 (() => {
   const STORAGE_KEY = "reptrack-data-v1";
+  const DATA_VERSION = 2;
+  const TRAINING_PLAN = {
+    "referenceDate": "2026-07-14",
+    "progression": {
+      "upperKg": 2.5,
+      "lowerKg": 5
+    },
+    "cycles": [
+      {
+        "week": 1,
+        "start": "2026-01-26",
+        "end": "2026-02-01",
+        "type": "Hard"
+      },
+      {
+        "week": 2,
+        "start": "2026-02-02",
+        "end": "2026-02-08",
+        "type": "Hard"
+      },
+      {
+        "week": 3,
+        "start": "2026-02-09",
+        "end": "2026-02-15",
+        "type": "Easy"
+      },
+      {
+        "week": 4,
+        "start": "2026-02-16",
+        "end": "2026-02-22",
+        "type": "Hard"
+      },
+      {
+        "week": 5,
+        "start": "2026-02-23",
+        "end": "2026-03-01",
+        "type": "Hard"
+      },
+      {
+        "week": 6,
+        "start": "2026-03-02",
+        "end": "2026-03-08",
+        "type": "Easy"
+      },
+      {
+        "week": 7,
+        "start": "2026-03-09",
+        "end": "2026-03-15",
+        "type": "Hard"
+      },
+      {
+        "week": 8,
+        "start": "2026-03-16",
+        "end": "2026-03-22",
+        "type": "Hard PR"
+      },
+      {
+        "week": 9,
+        "start": "2026-03-23",
+        "end": "2026-03-29",
+        "type": "Easy"
+      },
+      {
+        "week": 10,
+        "start": "2026-03-30",
+        "end": "2026-04-05",
+        "type": "Hard"
+      },
+      {
+        "week": 11,
+        "start": "2026-04-06",
+        "end": "2026-04-12",
+        "type": "Hard"
+      },
+      {
+        "week": 12,
+        "start": "2026-04-13",
+        "end": "2026-04-19",
+        "type": "Easy"
+      },
+      {
+        "week": 13,
+        "start": "2026-04-20",
+        "end": "2026-04-26",
+        "type": "Hard"
+      },
+      {
+        "week": 14,
+        "start": "2026-04-27",
+        "end": "2026-05-03",
+        "type": "Hard"
+      },
+      {
+        "week": 15,
+        "start": "2026-05-04",
+        "end": "2026-05-10",
+        "type": "Easy"
+      },
+      {
+        "week": 16,
+        "start": "2026-05-11",
+        "end": "2026-05-17",
+        "type": "Hard"
+      },
+      {
+        "week": 17,
+        "start": "2026-05-18",
+        "end": "2026-05-24",
+        "type": "Hard PR"
+      },
+      {
+        "week": 18,
+        "start": "2026-05-25",
+        "end": "2026-05-31",
+        "type": "Easy"
+      },
+      {
+        "week": 19,
+        "start": "2026-06-01",
+        "end": "2026-06-07",
+        "type": "Hard"
+      },
+      {
+        "week": 20,
+        "start": "2026-06-08",
+        "end": "2026-06-14",
+        "type": "Hard"
+      },
+      {
+        "week": 21,
+        "start": "2026-06-15",
+        "end": "2026-06-21",
+        "type": "Easy"
+      },
+      {
+        "week": 22,
+        "start": "2026-06-22",
+        "end": "2026-06-28",
+        "type": "Hard"
+      },
+      {
+        "week": 23,
+        "start": "2026-06-29",
+        "end": "2026-07-05",
+        "type": "Hard PR"
+      },
+      {
+        "week": 24,
+        "start": "2026-07-06",
+        "end": "2026-07-12",
+        "type": "Easy"
+      },
+      {
+        "week": 25,
+        "start": "2026-07-13",
+        "end": "2026-07-19",
+        "type": "Hard"
+      },
+      {
+        "week": 26,
+        "start": "2026-07-20",
+        "end": "2026-07-26",
+        "type": "Hard"
+      },
+      {
+        "week": 27,
+        "start": "2026-07-27",
+        "end": "2026-08-02",
+        "type": "Easy / Hard"
+      },
+      {
+        "week": 28,
+        "start": "2026-08-03",
+        "end": "2026-08-09",
+        "type": "Hard"
+      },
+      {
+        "week": 29,
+        "start": "2026-08-10",
+        "end": "2026-08-16",
+        "type": "Hard PR"
+      },
+      {
+        "week": 30,
+        "start": "2026-08-17",
+        "end": "2026-08-23",
+        "type": "Hard"
+      },
+      {
+        "week": 31,
+        "start": "2026-08-24",
+        "end": "2026-08-30",
+        "type": "Hard"
+      },
+      {
+        "week": 32,
+        "start": "2026-08-31",
+        "end": "2026-09-06",
+        "type": "Hard"
+      },
+      {
+        "week": 33,
+        "start": "2026-09-07",
+        "end": "2026-09-13",
+        "type": "Hard"
+      },
+      {
+        "week": 34,
+        "start": "2026-09-14",
+        "end": "2026-09-20",
+        "type": "Hard PR"
+      },
+      {
+        "week": 35,
+        "start": "2026-09-21",
+        "end": "2026-09-27",
+        "type": "Hard"
+      },
+      {
+        "week": 36,
+        "start": "2026-09-28",
+        "end": "2026-10-04",
+        "type": "Easy"
+      }
+    ],
+    "rules": [
+      "Complete 1 warm-up set, then 3 working sets.",
+      "Use 10–12 reps on hard weeks; 8–10 is acceptable after increasing weight.",
+      "Increase only after 3 × 12 with good technique: +2.5 kg upper body or +5 kg lower body.",
+      "Rest 2–4 minutes and use slow, controlled reps.",
+      "Only the final isolation set may reach failure; keep compound lifts short of failure.",
+      "On machines, an optional drop set can follow the third working set."
+    ]
+  };
+  const REFERENCE_PRS = [
+    {
+      "name": "Pull Down",
+      "category": "Back",
+      "weight": 40,
+      "load": "per side",
+      "note": "Machine load recorded for each side"
+    },
+    {
+      "name": "Lat Pulldown",
+      "category": "Back",
+      "weight": 50,
+      "note": "Recorded for one- or two-arm variation"
+    },
+    {
+      "name": "Horizontal Cable Row",
+      "category": "Back",
+      "weight": 55,
+      "note": "Working range recorded as 50–55 kg"
+    },
+    {
+      "name": "Cambered Lat Pulldown",
+      "category": "Back",
+      "weight": 91
+    },
+    {
+      "name": "Low Row",
+      "category": "Back",
+      "weight": 55,
+      "note": "Machine; alternate setup recorded as 37.5 kg per side"
+    },
+    {
+      "name": "Barbell Row",
+      "category": "Back",
+      "weight": 15,
+      "load": "per side",
+      "note": "Bar weight was not specified"
+    },
+    {
+      "name": "Seated Row",
+      "category": "Back",
+      "weight": 77.5
+    },
+    {
+      "name": "Kneeling Single-Arm Row",
+      "category": "Back",
+      "weight": 27.5
+    },
+    {
+      "name": "Weighted Pull-Up",
+      "category": "Back",
+      "weight": 11.25,
+      "load": "added"
+    },
+    {
+      "name": "Vertical Pull",
+      "category": "Back",
+      "weight": 60
+    },
+    {
+      "name": "Lat Prayer",
+      "category": "Back",
+      "weight": 20
+    },
+    {
+      "name": "Bar Pull",
+      "category": "Back",
+      "weight": 17.5,
+      "load": "per side"
+    },
+    {
+      "name": "Barbell Curl",
+      "category": "Biceps",
+      "weight": 11.5,
+      "load": "per side"
+    },
+    {
+      "name": "Machine Curl",
+      "category": "Biceps",
+      "weight": 20,
+      "reps": 4,
+      "note": "Usual working weight recorded as 17.5 kg"
+    },
+    {
+      "name": "Rope Curl",
+      "category": "Biceps",
+      "weight": 17.5
+    },
+    {
+      "name": "Incline Dumbbell Curl",
+      "category": "Biceps",
+      "weight": 16,
+      "load": "per dumbbell",
+      "note": "Long-head emphasis"
+    },
+    {
+      "name": "Dumbbell Curl",
+      "category": "Biceps",
+      "weight": 12,
+      "load": "per dumbbell",
+      "note": "Short-head emphasis"
+    },
+    {
+      "name": "Single-Arm Hammer Curl",
+      "category": "Biceps",
+      "weight": 12.5
+    },
+    {
+      "name": "Spider Curl",
+      "category": "Biceps",
+      "weight": 12
+    },
+    {
+      "name": "Biceps Machine (Unspecified)",
+      "category": "Biceps",
+      "weight": 20,
+      "note": "Exercise name was generic in the source notes"
+    },
+    {
+      "name": "Hammer Curl",
+      "category": "Biceps",
+      "weight": 14,
+      "load": "per dumbbell",
+      "note": "Check 12 clean reps before increasing"
+    },
+    {
+      "name": "Brachialis Curl",
+      "category": "Biceps",
+      "weight": 32.5,
+      "note": "Source marked this as 32.5 kg+"
+    },
+    {
+      "name": "Forearm Curl",
+      "category": "Biceps",
+      "weight": 11.25
+    },
+    {
+      "name": "Brachialis Cable Pull",
+      "category": "Biceps",
+      "weight": 10
+    },
+    {
+      "name": "Leg Extension",
+      "category": "Legs",
+      "weight": 85,
+      "note": "Regular load also recorded as 67.5 kg"
+    },
+    {
+      "name": "Single-Leg Extension",
+      "category": "Legs",
+      "weight": 38.25
+    },
+    {
+      "name": "Goblet Squat",
+      "category": "Legs",
+      "weight": 26
+    },
+    {
+      "name": "Back Squat",
+      "category": "Legs",
+      "weight": 80,
+      "note": "Another setup: 27.5 kg per side, barefoot, toes out"
+    },
+    {
+      "name": "Romanian Deadlift (Barbell)",
+      "category": "Legs",
+      "weight": 45
+    },
+    {
+      "name": "Romanian Deadlift (Dumbbells)",
+      "category": "Legs",
+      "weight": 16,
+      "load": "per dumbbell"
+    },
+    {
+      "name": "Bulgarian Split Squat",
+      "category": "Legs",
+      "weight": 14,
+      "note": "Implement configuration was not specified"
+    },
+    {
+      "name": "Glute Machine",
+      "category": "Legs",
+      "weight": 60
+    },
+    {
+      "name": "Dumbbell Calf Raise",
+      "category": "Legs",
+      "weight": 15,
+      "reps": 25,
+      "note": "3 × 25 recorded"
+    },
+    {
+      "name": "Smith Machine Calf Raise",
+      "category": "Legs",
+      "weight": 10,
+      "reps": 25,
+      "note": "3 × 25 recorded"
+    },
+    {
+      "name": "Standing Calf Extension",
+      "category": "Legs",
+      "weight": 45
+    },
+    {
+      "name": "Resistance Band",
+      "category": "Legs",
+      "reps": 30,
+      "note": "Resistance level was not specified"
+    },
+    {
+      "name": "Squat Machine",
+      "category": "Legs",
+      "weight": 10
+    },
+    {
+      "name": "Leg Press",
+      "category": "Legs",
+      "weight": 35
+    },
+    {
+      "name": "Rotary Calf",
+      "category": "Legs",
+      "weight": 40
+    },
+    {
+      "name": "Cable Fly",
+      "category": "Chest",
+      "weight": 12.5,
+      "note": "Listed as cable pulls in the source notes"
+    },
+    {
+      "name": "Wide Chest Press",
+      "category": "Chest",
+      "weight": 30,
+      "load": "per side"
+    },
+    {
+      "name": "Chest Press Machine",
+      "category": "Chest",
+      "weight": 57.5,
+      "note": "Another machine was recorded at 125 lb"
+    },
+    {
+      "name": "Dumbbell Pullover",
+      "category": "Chest",
+      "weight": 15
+    },
+    {
+      "name": "Incline Dumbbell Press",
+      "category": "Chest",
+      "weight": 20,
+      "reps": 5,
+      "load": "per dumbbell"
+    },
+    {
+      "name": "Power Smith Chest Press",
+      "category": "Chest",
+      "weight": 8.75,
+      "load": "per side"
+    },
+    {
+      "name": "Dumbbell Chest Press",
+      "category": "Chest",
+      "weight": 20,
+      "load": "per dumbbell"
+    },
+    {
+      "name": "Incline Bench Press",
+      "category": "Chest",
+      "weight": 12.25,
+      "load": "per side",
+      "note": "Source marked this as 12.25 kg per side+"
+    },
+    {
+      "name": "Adjustable Pulley Rear Delt",
+      "category": "Shoulders",
+      "weight": 5
+    },
+    {
+      "name": "Adjustable Pulley Shoulder",
+      "category": "Shoulders",
+      "weight": 10,
+      "note": "Power On machine"
+    },
+    {
+      "name": "Shoulder Press Machine",
+      "category": "Shoulders",
+      "weight": 36,
+      "note": "Recorded range: 17.5–36 kg"
+    },
+    {
+      "name": "Dumbbell Shoulder Press",
+      "category": "Shoulders",
+      "weight": 14,
+      "load": "per dumbbell"
+    },
+    {
+      "name": "Standing Dumbbell Low Row",
+      "category": "Shoulders",
+      "weight": 14,
+      "load": "per dumbbell"
+    },
+    {
+      "name": "Technogym Shoulder Press",
+      "category": "Shoulders",
+      "weight": 35
+    },
+    {
+      "name": "Military Press",
+      "category": "Shoulders",
+      "weight": 35
+    },
+    {
+      "name": "Seated Military Press",
+      "category": "Shoulders",
+      "weight": 7.5
+    },
+    {
+      "name": "Lateral Raise",
+      "category": "Shoulders",
+      "weight": 12,
+      "load": "per dumbbell",
+      "note": "Source marked this as 12 kg+"
+    },
+    {
+      "name": "Rear Delt Fly",
+      "category": "Shoulders",
+      "weight": 25
+    },
+    {
+      "name": "Cable Lateral Raise",
+      "category": "Shoulders",
+      "weight": 5
+    },
+    {
+      "name": "Hammer Front Delt Fly",
+      "category": "Shoulders",
+      "weight": 9
+    },
+    {
+      "name": "Arm-Wrestling Cable Rotation",
+      "category": "Shoulders",
+      "weight": 7.5
+    },
+    {
+      "name": "Smith Military Press",
+      "category": "Shoulders",
+      "weight": 12.5,
+      "load": "per side"
+    },
+    {
+      "name": "Triceps Pushdown",
+      "category": "Triceps",
+      "weight": 27.5,
+      "note": "Consider increasing after 24 Aug 2026 if 3 × 12 is clean"
+    },
+    {
+      "name": "Overhead Cable Triceps Extension",
+      "category": "Triceps",
+      "weight": 12.5,
+      "reps": 25,
+      "note": "Long-head emphasis; Power On machine"
+    },
+    {
+      "name": "Overhead Dumbbell Triceps Extension",
+      "category": "Triceps",
+      "weight": 12,
+      "reps": 20
+    },
+    {
+      "name": "CBUM Pull",
+      "category": "Triceps",
+      "weight": 5,
+      "note": "Source marked this as 5 kg+"
+    },
+    {
+      "name": "Arm Extension Machine",
+      "category": "Triceps",
+      "weight": 35
+    },
+    {
+      "name": "CBUM Long-Head Pull",
+      "category": "Triceps",
+      "weight": 7.5,
+      "note": "Recheck before increasing"
+    },
+    {
+      "name": "Neck Pull",
+      "category": "Neck",
+      "weight": 10,
+      "reps": 20,
+      "note": "3 × 20 plus 1 × 10 recorded"
+    },
+    {
+      "name": "Forearm Internal Rotation",
+      "category": "Forearms",
+      "weight": 1.25,
+      "load": "per side"
+    },
+    {
+      "name": "Barbell Wrist Pull",
+      "category": "Forearms",
+      "weight": 2.5,
+      "load": "per side"
+    },
+    {
+      "name": "Short-Bar Forearm Raise",
+      "category": "Forearms",
+      "weight": 7.25,
+      "load": "per side"
+    }
+  ];
   const DEFAULT_DATA = {
+    version: DATA_VERSION,
     settings: { unit: "kg", defaultSets: 3 },
+    trainingPlan: TRAINING_PLAN,
+    referencePRs: REFERENCE_PRS,
     templates: [
       {
-        id: "chest-triceps",
-        name: "Chest + Triceps",
-        day: "Tuesday",
-        exercises: [
-          { name: "Bench Press", category: "Chest" },
-          { name: "Incline Dumbbell Press", category: "Chest" },
-          { name: "Chest Fly", category: "Chest" },
-          { name: "Triceps Pushdown", category: "Triceps" },
-          { name: "Overhead Triceps Extension", category: "Triceps" }
+        "id": "push",
+        "name": "Push · Chest + Triceps",
+        "day": "Tuesday",
+        "exercises": [
+          {
+            "name": "Wide Chest Press",
+            "category": "Chest"
+          },
+          {
+            "name": "Incline Dumbbell Press",
+            "category": "Chest"
+          },
+          {
+            "name": "Cable Fly",
+            "category": "Chest"
+          },
+          {
+            "name": "Dumbbell Pullover",
+            "category": "Chest"
+          },
+          {
+            "name": "Triceps Pushdown",
+            "category": "Triceps"
+          },
+          {
+            "name": "Overhead Cable Triceps Extension",
+            "category": "Triceps"
+          },
+          {
+            "name": "Overhead Dumbbell Triceps Extension",
+            "category": "Triceps"
+          }
         ]
       },
       {
-        id: "legs-shoulders",
-        name: "Legs + Shoulders",
-        day: "Thursday",
-        exercises: [
-          { name: "Squat or Leg Press", category: "Legs" },
-          { name: "Romanian Deadlift", category: "Legs" },
-          { name: "Leg Extension", category: "Legs" },
-          { name: "Leg Curl", category: "Legs" },
-          { name: "Shoulder Press", category: "Shoulders" },
-          { name: "Lateral Raise", category: "Shoulders" }
+        "id": "pull",
+        "name": "Pull · Back + Biceps",
+        "day": "Thursday",
+        "exercises": [
+          {
+            "name": "Lat Pulldown",
+            "category": "Back"
+          },
+          {
+            "name": "Seated Row",
+            "category": "Back"
+          },
+          {
+            "name": "Low Row",
+            "category": "Back"
+          },
+          {
+            "name": "Barbell Row",
+            "category": "Back"
+          },
+          {
+            "name": "Spider Curl",
+            "category": "Biceps"
+          },
+          {
+            "name": "Hammer Curl",
+            "category": "Biceps"
+          },
+          {
+            "name": "Brachialis Curl",
+            "category": "Biceps"
+          },
+          {
+            "name": "Lateral Raise",
+            "category": "Shoulders"
+          }
         ]
       },
       {
-        id: "back-biceps",
-        name: "Back + Biceps",
-        day: "Saturday",
-        exercises: [
-          { name: "Lat Pulldown", category: "Back" },
-          { name: "Seated Cable Row", category: "Back" },
-          { name: "Chest-Supported Row", category: "Back" },
-          { name: "Rear Delt Fly", category: "Shoulders" },
-          { name: "Barbell or EZ-Bar Curl", category: "Biceps" },
-          { name: "Hammer Curl", category: "Biceps" }
+        "id": "legs",
+        "name": "Legs + Shoulders",
+        "day": "Saturday",
+        "exercises": [
+          {
+            "name": "Back Squat",
+            "category": "Legs"
+          },
+          {
+            "name": "Romanian Deadlift (Barbell)",
+            "category": "Legs"
+          },
+          {
+            "name": "Leg Extension",
+            "category": "Legs"
+          },
+          {
+            "name": "Leg Press",
+            "category": "Legs"
+          },
+          {
+            "name": "Bulgarian Split Squat",
+            "category": "Legs"
+          },
+          {
+            "name": "Standing Calf Extension",
+            "category": "Legs"
+          },
+          {
+            "name": "Dumbbell Shoulder Press",
+            "category": "Shoulders"
+          },
+          {
+            "name": "Rear Delt Fly",
+            "category": "Shoulders"
+          },
+          {
+            "name": "Weighted Pull-Up",
+            "category": "Back"
+          }
         ]
       }
     ],
@@ -600,9 +1376,15 @@
     try {
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
       if (!stored) return clone(DEFAULT_DATA);
+      const needsUpgrade = number(stored.version) < DATA_VERSION;
       return {
+        version: DATA_VERSION,
         settings: { ...DEFAULT_DATA.settings, ...(stored.settings || {}) },
-        templates: Array.isArray(stored.templates) && stored.templates.length ? stored.templates : clone(DEFAULT_DATA.templates),
+        trainingPlan: needsUpgrade || !stored.trainingPlan ? clone(DEFAULT_DATA.trainingPlan) : stored.trainingPlan,
+        referencePRs: needsUpgrade || !Array.isArray(stored.referencePRs) ? clone(DEFAULT_DATA.referencePRs) : stored.referencePRs,
+        templates: needsUpgrade
+          ? clone(DEFAULT_DATA.templates)
+          : (Array.isArray(stored.templates) && stored.templates.length ? stored.templates : clone(DEFAULT_DATA.templates)),
         workouts: Array.isArray(stored.workouts) ? stored.workouts : [],
         bodyweight: Array.isArray(stored.bodyweight) ? stored.bodyweight : []
       };
@@ -676,7 +1458,9 @@
     $("weekVolume").textContent = `${Math.round(volume).toLocaleString()} ${getUnit()}`;
 
     const prs = calculatePRs();
-    $("totalPRs").textContent = Object.keys(prs).length;
+    const trackedPRs = new Set([...Object.keys(prs), ...data.referencePRs.map(pr => pr.name)]);
+    $("totalPRs").textContent = trackedPRs.size;
+    renderTrainingPlan();
 
     $("splitList").innerHTML = data.templates.map(t => `
       <div class="list-item">
@@ -702,6 +1486,36 @@
     $$("[data-start-template]").forEach(btn => {
       btn.onclick = () => beginWorkout(btn.dataset.startTemplate);
     });
+  }
+
+  function planDate(value) {
+    return new Intl.DateTimeFormat("en", { day:"numeric", month:"short" }).format(new Date(value + "T12:00:00"));
+  }
+  function phaseGuidance(type) {
+    if (type === "Hard PR") return "Choose only 1–2 exercises for a PR attempt. Beat either weight or reps, not every exercise in the session.";
+    if (type === "Easy") return "Reduce working weights by 20–30%, use 12–15 clean reps, avoid failure, and prioritize recovery.";
+    if (type === "Easy / Hard") return "Treat this as a transition week. Use recovery and performance to decide whether each exercise stays easy or returns to working weight.";
+    return "Use your working weight for 10–12 reps. Increase only after 3 × 12 with good technique; the final isolation set may reach failure.";
+  }
+  function renderTrainingPlan() {
+    const plan = data.trainingPlan || DEFAULT_DATA.trainingPlan;
+    const cycles = Array.isArray(plan.cycles) ? plan.cycles : [];
+    const today = todayISO();
+    const current = cycles.find(c => today >= c.start && today <= c.end);
+    const next = current
+      ? cycles.find(c => c.week === current.week + 1)
+      : cycles.find(c => c.start > today);
+
+    $("cyclePhase").textContent = current ? `${current.type} · Week ${current.week}` : "No active cycle";
+    $("cycleDates").textContent = current ? `${planDate(current.start)} – ${planDate(current.end)}` : "Calendar ends 4 Oct 2026";
+    $("nextCyclePhase").textContent = next ? `${next.type} · Week ${next.week}` : "Plan complete";
+    $("nextCycleDates").textContent = next ? `${planDate(next.start)} – ${planDate(next.end)}` : "Update the cycle calendar";
+    $("cycleGuidance").textContent = current
+      ? phaseGuidance(current.type)
+      : "There is no phase scheduled for today. Update the training cycle before applying progression rules.";
+    $("trainingRules").innerHTML = (plan.rules || []).map(rule =>
+      `<div class="rule-item">${escapeHtml(rule)}</div>`
+    ).join("");
   }
 
   function createSet(index) {
@@ -795,11 +1609,21 @@
       renderExerciseList();
     });
   }
+  function referenceLoadText(pr) {
+    if (!pr) return "";
+    if (!pr.weight) return pr.reps ? `${pr.reps} reps` : "Load not recorded";
+    const prefix = pr.load === "added" ? "+" : "";
+    const suffix = pr.load === "per side" ? " / side" : pr.load === "per dumbbell" ? " / dumbbell" : "";
+    return `${prefix}${pr.weight} kg${suffix}${pr.reps ? ` × ${pr.reps}` : ""}`;
+  }
   function previousBestText(exerciseName) {
-    const entries = exerciseEntries(exerciseName);
-    if (!entries.length) return "No previous data";
-    const best = Math.max(...entries.map(e => e.e1rm));
-    return `Previous best e1RM: ${best.toFixed(1)} ${getUnit()}`;
+    const logged = exerciseEntries(exerciseName).filter(e => e.source === "workout" && number(e.e1rm) > 0);
+    if (logged.length) {
+      const best = Math.max(...logged.map(e => e.e1rm));
+      return `Previous logged e1RM: ${best.toFixed(1)} ${getUnit()}`;
+    }
+    const reference = data.referencePRs.find(pr => pr.name === exerciseName);
+    return reference ? `Reference best: ${referenceLoadText(reference)}` : "No previous data";
   }
 
   function updateDraftFromForm() {
@@ -920,10 +1744,20 @@
     const names = new Set();
     data.templates.forEach(t => t.exercises.forEach(ex => names.add(ex.name)));
     data.workouts.forEach(w => w.exercises.forEach(ex => names.add(ex.name)));
+    data.referencePRs.forEach(pr => names.add(pr.name));
     return [...names].sort();
   }
   function exerciseEntries(name) {
     const entries = [];
+    data.referencePRs.filter(pr => pr.name === name && number(pr.weight) > 0).forEach(pr => {
+      entries.push({
+        date: pr.date || data.trainingPlan.referenceDate,
+        weight: number(pr.weight),
+        e1rm: pr.reps ? e1rm(number(pr.weight), number(pr.reps)) : null,
+        volume: null,
+        source: "reference"
+      });
+    });
     data.workouts.forEach(w => w.exercises.filter(ex => ex.name === name).forEach(ex => {
       const valid = ex.sets.filter(set => number(set.weight) > 0 && number(set.reps) > 0);
       if (!valid.length) return;
@@ -931,7 +1765,8 @@
         date: w.date,
         weight: Math.max(...valid.map(s => number(s.weight))),
         e1rm: Math.max(...valid.map(s => e1rm(number(s.weight), number(s.reps)))),
-        volume: valid.reduce((sum,s) => sum + number(s.weight) * number(s.reps), 0)
+        volume: valid.reduce((sum,s) => sum + number(s.weight) * number(s.reps), 0),
+        source: "workout"
       });
     }));
     return entries.sort((a,b) => a.date.localeCompare(b.date));
@@ -942,8 +1777,44 @@
     $("progressExercise").innerHTML = names.map(name => `<option>${escapeHtml(name)}</option>`).join("");
     if (names.includes(current)) $("progressExercise").value = current;
   }
+  function renderReferencePRFilters() {
+    const categories = ["All", ...new Set(data.referencePRs.map(pr => pr.category))];
+    const current = $("prCategory").value || "All";
+    $("prCategory").innerHTML = categories.map(category =>
+      `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+    ).join("");
+    $("prCategory").value = categories.includes(current) ? current : "All";
+  }
+  function renderReferencePRs() {
+    const category = $("prCategory").value || "All";
+    const query = $("prSearch").value.trim().toLowerCase();
+    const matches = data.referencePRs
+      .filter(pr => category === "All" || pr.category === category)
+      .filter(pr => !query || `${pr.name} ${pr.category} ${pr.note || ""}`.toLowerCase().includes(query))
+      .sort((a,b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+
+    $("prList").innerHTML = matches.length ? matches.map(pr => `
+      <div class="list-item">
+        <div>
+          <strong>${escapeHtml(pr.name)}</strong>
+          <small>${escapeHtml(pr.category)}${pr.note ? ` · ${escapeHtml(pr.note)}` : ""}</small>
+        </div>
+        <div class="pr-value">
+          <span class="tag">${escapeHtml(referenceLoadText(pr))}</span>
+          <small>${formatDate(pr.date || data.trainingPlan.referenceDate)}</small>
+        </div>
+      </div>
+    `).join("") : `<div class="empty">No reference PRs match this filter.</div>`;
+  }
+  function renderExerciseSuggestions() {
+    $("exerciseSuggestions").innerHTML = data.referencePRs.map(pr =>
+      `<option value="${escapeHtml(pr.name)}"></option>`
+    ).join("");
+  }
   function renderProgress() {
     renderProgressSelectors();
+    renderReferencePRFilters();
+    renderReferencePRs();
     drawProgressChart();
     drawBodyweightChart();
     renderBodyweightList();
@@ -1008,8 +1879,8 @@
   function drawProgressChart() {
     const name = $("progressExercise").value;
     const metric = $("progressMetric").value || "e1rm";
-    const entries = exerciseEntries(name);
-    const unit = metric === "volume" ? getUnit() : getUnit();
+    const entries = exerciseEntries(name).filter(entry => Number.isFinite(entry[metric]) && entry[metric] > 0);
+    const unit = getUnit();
     drawLineChart($("progressCanvas"), entries, metric, v => Math.round(v).toString());
 
     if (!entries.length) {
@@ -1026,7 +1897,7 @@
     const change = first ? ((latest-first)/first)*100 : 0;
     $("selectedBest").textContent = `${best.toFixed(metric === "e1rm" ? 1 : 0)}${suffix}`;
     $("selectedLatest").textContent = `${latest.toFixed(metric === "e1rm" ? 1 : 0)}${suffix}`;
-    $("selectedChange").textContent = `${change >= 0 ? "+" : ""}${change.toFixed(1)}%`;
+    $("selectedChange").textContent = entries.length === 1 ? "Baseline" : `${change >= 0 ? "+" : ""}${change.toFixed(1)}%`;
   }
 
   function drawBodyweightChart() {
@@ -1093,9 +1964,13 @@
     try {
       const parsed = JSON.parse(await file.text());
       if (!parsed || !Array.isArray(parsed.workouts) || !Array.isArray(parsed.templates)) throw new Error();
+      const needsUpgrade = number(parsed.version) < DATA_VERSION;
       data = {
+        version:DATA_VERSION,
         settings:{...DEFAULT_DATA.settings,...(parsed.settings||{})},
-        templates:parsed.templates,
+        trainingPlan:needsUpgrade || !parsed.trainingPlan ? clone(DEFAULT_DATA.trainingPlan) : parsed.trainingPlan,
+        referencePRs:needsUpgrade || !Array.isArray(parsed.referencePRs) ? clone(DEFAULT_DATA.referencePRs) : parsed.referencePRs,
+        templates:needsUpgrade ? clone(DEFAULT_DATA.templates) : parsed.templates,
         workouts:parsed.workouts,
         bodyweight:Array.isArray(parsed.bodyweight)?parsed.bodyweight:[]
       };
@@ -1135,6 +2010,12 @@
     $("confirmAddExerciseBtn").onclick = addExercise;
     $("progressExercise").onchange = drawProgressChart;
     $("progressMetric").onchange = drawProgressChart;
+    $("prCategory").onchange = renderReferencePRs;
+    $("prSearch").oninput = renderReferencePRs;
+    $("newExerciseName").addEventListener("change", () => {
+      const match = data.referencePRs.find(pr => pr.name === $("newExerciseName").value.trim());
+      if (match) $("newExerciseCategory").value = match.category;
+    });
     $("addBodyweightBtn").onclick = () => {
       $("bodyweightDate").value = todayISO();
       openModal("bodyweightModal");
@@ -1162,7 +2043,9 @@
   }
 
   function boot() {
+    persist();
     renderTemplateOptions();
+    renderExerciseSuggestions();
     $("unitSelect").value = data.settings.unit;
     $("defaultSets").value = data.settings.defaultSets;
     if (!draft) draft = makeDraft(getTodayTemplate());
@@ -1184,3 +2067,4 @@
 </script>
 </body>
 </html>
+
