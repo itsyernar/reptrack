@@ -522,6 +522,10 @@
       background: var(--accent);
       box-shadow: 0 0 0 5px rgba(34,201,67,.12);
     }
+    .live-workout-card.paused .live-label i {
+      background: var(--warning);
+      box-shadow: 0 0 0 5px rgba(244,163,64,.14);
+    }
     #workoutProgressLabel { display: block; font-size: 1.04rem; }
     .live-workout-tools { display: flex; align-items: center; gap: 8px; }
     .elapsed-time {
@@ -531,6 +535,11 @@
       font-variant-numeric: tabular-nums;
       font-weight: 800;
       text-align: center;
+    }
+    #workoutPauseBtn[aria-pressed="true"] {
+      border-color: rgba(244,163,64,.38);
+      background: rgba(244,163,64,.13);
+      color: #9a5b0a;
     }
     .workout-progress-track {
       height: 7px;
@@ -546,6 +555,79 @@
       border-radius: inherit;
       background: var(--accent);
       transition: width .22s ease;
+    }
+    .overload-intro {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 13px 15px;
+      border: 1px solid #dcecdf;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #f5fff7, #fff);
+    }
+    .overload-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 13px;
+      background: #dcf8e2;
+      color: #15852c;
+      font-size: 1.15rem;
+      font-weight: 950;
+    }
+    .overload-intro strong,
+    .overload-intro small { display: block; }
+    .overload-intro strong { margin-bottom: 2px; font-size: .88rem; }
+    .overload-intro small { color: var(--muted); line-height: 1.35; }
+    .progression-cue {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 13px;
+      padding: 11px 12px;
+      border: 1px solid #e5e8e6;
+      border-radius: 15px;
+      background: #f6f8f7;
+    }
+    .progression-cue.increase {
+      border-color: #bfe8c7;
+      background: #effbf1;
+    }
+    .progression-cue-copy { min-width: 0; }
+    .progression-cue-label {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--muted);
+      font-size: .62rem;
+      font-weight: 850;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .progression-cue strong {
+      display: block;
+      font-size: .86rem;
+      line-height: 1.3;
+    }
+    .progression-cue-detail {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .68rem;
+      line-height: 1.35;
+    }
+    .progression-badge {
+      flex: 0 0 auto;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: #d9f6df;
+      color: #117428;
+      font-size: .7rem;
+      font-weight: 900;
+      white-space: nowrap;
     }
     .btn:disabled {
       cursor: default;
@@ -846,6 +928,31 @@
       background: var(--panel);
       box-shadow: var(--shadow);
     }
+    html[data-theme="dark"] .overload-intro {
+      border-color: #294832;
+      background: linear-gradient(135deg, #17281c, #191d1b);
+    }
+    html[data-theme="dark"] .overload-icon {
+      background: #234f2d;
+      color: #7fe493;
+    }
+    html[data-theme="dark"] .progression-cue {
+      border-color: #303633;
+      background: #202522;
+    }
+    html[data-theme="dark"] .progression-cue.increase {
+      border-color: #356a41;
+      background: #1b3020;
+    }
+    html[data-theme="dark"] .progression-badge {
+      background: #285b33;
+      color: #96eaa6;
+    }
+    html[data-theme="dark"] #workoutPauseBtn[aria-pressed="true"] {
+      border-color: rgba(244,163,64,.45);
+      background: rgba(244,163,64,.14);
+      color: #ffc270;
+    }
     html[data-theme="dark"] .workout-progress-track { background: #303633; }
     html[data-theme="dark"] .exercise-card.completed {
       border-color: rgba(84,220,110,.5);
@@ -1022,7 +1129,12 @@
       .live-workout-head { align-items: flex-start; }
       .live-workout-tools { gap: 5px; }
       .elapsed-time { min-width: 48px; font-size: .76rem; }
-      #copyPreviousWorkoutBtn { padding-left: 9px; padding-right: 9px; font-size: .7rem; }
+      #workoutPauseBtn,
+      #copyPreviousWorkoutBtn { padding-left: 8px; padding-right: 8px; font-size: .68rem; }
+      .overload-intro { padding: 12px 13px; }
+      .progression-cue { align-items: flex-start; padding: 10px; }
+      .progression-cue strong { font-size: .79rem; }
+      .progression-cue-detail { font-size: .64rem; }
       .set-table { grid-template-columns: 33px 1fr 1fr 1fr 32px; gap: 4px; }
       .set-table input { min-height: 42px; padding: 8px 4px; font-size: .78rem; }
       .set-table .set-check input { min-height: 0; padding: 0; }
@@ -1141,18 +1253,26 @@
 
     <section id="logView" class="view">
       <div class="section-head"><div><h2 data-i18n="logWorkout">Log workout</h2><p data-i18n="logDesc">Record working sets, reps, weight, and RIR</p></div></div>
-      <div class="live-workout-card">
+      <div class="live-workout-card" id="liveWorkoutCard">
         <div class="live-workout-head">
           <div>
-            <span class="live-label"><i></i><span data-i18n="liveWorkout">Live workout</span></span>
+            <span class="live-label"><i></i><span id="liveWorkoutLabel" data-i18n="liveWorkout">Live workout</span></span>
             <strong id="workoutProgressLabel">0 of 0 sets</strong>
           </div>
           <div class="live-workout-tools">
             <span id="workoutElapsed" class="elapsed-time">00:00</span>
+            <button class="btn btn-small" id="workoutPauseBtn" type="button" data-i18n="pauseWorkoutTimer" aria-pressed="false">Pause</button>
             <button class="btn btn-small" id="copyPreviousWorkoutBtn" type="button" data-i18n="copyLastWorkout">Copy last</button>
           </div>
         </div>
         <div class="workout-progress-track"><span id="workoutProgressFill"></span></div>
+      </div>
+      <div class="overload-intro">
+        <span class="overload-icon" aria-hidden="true">↗</span>
+        <div>
+          <strong data-i18n="progressiveOverload">Progressive overload</strong>
+          <small data-i18n="progressiveOverloadDesc">Each exercise gets a next target from your latest logged working sets.</small>
+        </div>
       </div>
       <div class="card full">
         <div class="form-grid">
@@ -2157,6 +2277,66 @@
       "Live workout",
       "Тренировка идёт"
     ],
+    "workoutPaused": [
+      "Workout paused",
+      "Тренировка на паузе"
+    ],
+    "pauseWorkoutTimer": [
+      "Pause",
+      "Пауза"
+    ],
+    "resumeWorkoutTimer": [
+      "Resume",
+      "Продолжить"
+    ],
+    "workoutPausedToast": [
+      "Workout timer paused",
+      "Таймер тренировки приостановлен"
+    ],
+    "workoutResumedToast": [
+      "Workout resumed",
+      "Тренировка продолжена"
+    ],
+    "progressiveOverload": [
+      "Progressive overload",
+      "Прогрессивная нагрузка"
+    ],
+    "progressiveOverloadDesc": [
+      "Each exercise gets a next target from your latest logged working sets.",
+      "Для каждого упражнения цель рассчитывается по последним записанным рабочим подходам."
+    ],
+    "nextTarget": [
+      "Next target",
+      "Следующая цель"
+    ],
+    "increaseLoadTarget": [
+      "Next: {weight} {unit} · 3 × 8–10",
+      "Дальше: {weight} {unit} · 3 × 8–10"
+    ],
+    "repeatLoadTarget": [
+      "Repeat {weight} {unit} · aim for 3 × 12",
+      "Повтори {weight} {unit} · цель 3 × 12"
+    ],
+    "increaseLoadReason": [
+      "You logged 3 × 12 at {weight} {unit}. Add {increment} {unit} only if technique was clean.",
+      "Ты записал 3 × 12 с весом {weight} {unit}. Добавь {increment} {unit}, только если техника была чистой."
+    ],
+    "repeatLoadReason": [
+      "Latest reps at this load: {reps}. Reach a clean 3 × 12 before increasing.",
+      "Последние повторы с этим весом: {reps}. Дойди до чистых 3 × 12 перед повышением."
+    ],
+    "firstWorkingSets": [
+      "Log your first working sets",
+      "Сначала запиши рабочие подходы"
+    ],
+    "firstTargetReason": [
+      "Your automatic next target will appear after you save this workout.",
+      "Автоматическая следующая цель появится после сохранения этой тренировки."
+    ],
+    "referenceTargetReason": [
+      "Reference: {reference}. Log 3 working sets to unlock an automatic target.",
+      "Ориентир: {reference}. Запиши 3 рабочих подхода, чтобы получить автоматическую цель."
+    ],
     "setsComplete": [
       "{done} of {total} sets",
       "{done} из {total} подходов"
@@ -3138,6 +3318,9 @@
     const normalized = clone(saved);
     normalized.startedAt = normalized.startedAt || new Date().toISOString();
     normalized.restUntil = number(normalized.restUntil) || null;
+    normalized.pausedAt = number(normalized.pausedAt) || null;
+    normalized.pausedDurationMs = Math.max(0, number(normalized.pausedDurationMs));
+    normalized.pausedRestRemainingMs = Math.max(0, number(normalized.pausedRestRemainingMs)) || null;
     normalized.exercises = (normalized.exercises || []).map(exercise => ({
       ...exercise,
       id:exercise.id || uid("exercise"),
@@ -3160,7 +3343,7 @@
     data.activeWorkout = clone(draft);
     persist();
     updateWorkoutProgress();
-    if (!elapsedTimer) elapsedTimer = setInterval(updateWorkoutProgress, 1000);
+    if (!elapsedTimer && !isWorkoutPaused()) elapsedTimer = setInterval(updateWorkoutProgress, 1000);
   }
   function workoutSortKey(workout) {
     return (workout.date || "") + "|" + (workout.savedAt || "");
@@ -3177,6 +3360,73 @@
       .find(item => item.exercises.some(exercise => exercise.name === name));
     return workout?.exercises.find(exercise => exercise.name === name)?.sets || [];
   }
+  function progressionIncrement(category) {
+    const progression = data.trainingPlan?.progression || DEFAULT_DATA.trainingPlan.progression;
+    const kilograms = category === "Legs" ? number(progression.lowerKg) : number(progression.upperKg);
+    const increment = getUnit() === "lb" ? kilograms * 2.20462 : kilograms;
+    return Math.round(increment * 2) / 2;
+  }
+  function overloadRecommendation(exercise) {
+    const validSets = previousSetsForExercise(exercise.name)
+      .filter(set => number(set.weight) > 0 && number(set.reps) > 0);
+    if (!validSets.length) {
+      const reference = data.referencePRs.find(pr => pr.name === exercise.name);
+      return {
+        mode:"new",
+        title:t("firstWorkingSets"),
+        detail:reference
+          ? t("referenceTargetReason", { reference:referenceLoadText(reference) })
+          : t("firstTargetReason"),
+        badge:""
+      };
+    }
+
+    const groups = new Map();
+    validSets.forEach(set => {
+      const weight = number(set.weight);
+      const key = String(weight);
+      if (!groups.has(key)) groups.set(key, { weight, sets:[] });
+      groups.get(key).sets.push(set);
+    });
+    const working = [...groups.values()].sort((a,b) =>
+      b.sets.length - a.sets.length || b.weight - a.weight
+    )[0];
+    const increment = progressionIncrement(exercise.category);
+    const achieved = working.sets.filter(set => number(set.reps) >= 12).length >= 3;
+    const weight = formatNumber(working.weight);
+    const unit = unitLabel();
+
+    if (achieved) {
+      return {
+        mode:"increase",
+        title:t("increaseLoadTarget", { weight:formatNumber(working.weight + increment), unit }),
+        detail:t("increaseLoadReason", { weight, increment:formatNumber(increment), unit }),
+        badge:"+" + formatNumber(increment) + " " + unit
+      };
+    }
+    return {
+      mode:"repeat",
+      title:t("repeatLoadTarget", { weight, unit }),
+      detail:t("repeatLoadReason", {
+        reps:working.sets.map(set => number(set.reps)).join(" / "),
+        unit
+      }),
+      badge:""
+    };
+  }
+  function renderOverloadCue(exercise) {
+    const recommendation = overloadRecommendation(exercise);
+    return `
+      <div class="progression-cue ${recommendation.mode}">
+        <div class="progression-cue-copy">
+          <span class="progression-cue-label">${escapeHtml(t("nextTarget"))}</span>
+          <strong>${escapeHtml(recommendation.title)}</strong>
+          <span class="progression-cue-detail">${escapeHtml(recommendation.detail)}</span>
+        </div>
+        ${recommendation.badge ? `<span class="progression-badge">${escapeHtml(recommendation.badge)}</span>` : ""}
+      </div>
+    `;
+  }
   function formatTimer(seconds) {
     const safe = Math.max(0, Math.floor(seconds));
     const hours = Math.floor(safe / 3600);
@@ -3186,20 +3436,61 @@
       ? `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`
       : `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   }
+  function isWorkoutPaused(target = draft) {
+    return Boolean(number(target?.pausedAt));
+  }
+  function workoutElapsedSeconds(target = draft, now = Date.now()) {
+    if (!target?.startedAt) return 0;
+    const started = new Date(target.startedAt).getTime();
+    const clockEnd = isWorkoutPaused(target) ? number(target.pausedAt) : now;
+    return Math.max(0, (clockEnd - started - number(target.pausedDurationMs)) / 1000);
+  }
   function updateWorkoutProgress() {
     if (!draft) return;
     const { total, done } = draftSetCounts();
     $("workoutProgressLabel").textContent = t("setsComplete", { done, total });
     $("workoutProgressFill").style.width = (total ? (done / total) * 100 : 0) + "%";
-    const started = draft.startedAt ? new Date(draft.startedAt).getTime() : 0;
-    $("workoutElapsed").textContent = formatTimer(started ? (Date.now() - started) / 1000 : 0);
+    $("workoutElapsed").textContent = formatTimer(workoutElapsedSeconds());
+    const paused = isWorkoutPaused();
+    $("liveWorkoutCard").classList.toggle("paused", paused);
+    $("liveWorkoutLabel").textContent = t(paused ? "workoutPaused" : "liveWorkout");
+    $("workoutPauseBtn").textContent = t(paused ? "resumeWorkoutTimer" : "pauseWorkoutTimer");
+    $("workoutPauseBtn").disabled = !draft.startedAt;
+    $("workoutPauseBtn").setAttribute("aria-pressed", paused ? "true" : "false");
     $("copyPreviousWorkoutBtn").disabled = !lastWorkoutForDraft();
   }
   function startElapsedTicker() {
     clearInterval(elapsedTimer);
     elapsedTimer = null;
     updateWorkoutProgress();
-    if (draft?.startedAt) elapsedTimer = setInterval(updateWorkoutProgress, 1000);
+    if (draft?.startedAt && !isWorkoutPaused()) elapsedTimer = setInterval(updateWorkoutProgress, 1000);
+  }
+  function toggleWorkoutPause() {
+    if (!draft?.startedAt) return;
+    const now = Date.now();
+    if (isWorkoutPaused()) {
+      draft.pausedDurationMs = number(draft.pausedDurationMs) + Math.max(0, now - number(draft.pausedAt));
+      draft.pausedAt = null;
+      const remainingRest = number(draft.pausedRestRemainingMs);
+      draft.pausedRestRemainingMs = null;
+      if (remainingRest > 0) draft.restUntil = now + remainingRest;
+      persistDraft();
+      startElapsedTicker();
+      updateRestTimer();
+      if (number(draft.restUntil) > now) restTimerInterval = setInterval(updateRestTimer, 1000);
+      toast(t("workoutResumedToast"));
+      return;
+    }
+    draft.pausedAt = now;
+    const restUntil = number(draft.restUntil);
+    draft.pausedRestRemainingMs = restUntil > now ? restUntil - now : null;
+    draft.restUntil = null;
+    clearInterval(restTimerInterval);
+    restTimerInterval = null;
+    persistDraft();
+    startElapsedTicker();
+    updateRestTimer();
+    toast(t("workoutPausedToast"));
   }
   function configuredRestSeconds() {
     const seconds = number(data.settings.restSeconds);
@@ -3233,7 +3524,15 @@
   }
   function startRestTimer(seconds = configuredRestSeconds()) {
     if (!draft) return;
+    if (isWorkoutPaused()) {
+      draft.restUntil = null;
+      draft.pausedRestRemainingMs = Math.max(1, seconds) * 1000;
+      persistDraft();
+      updateRestTimer();
+      return;
+    }
     draft.restUntil = Date.now() + Math.max(1, seconds) * 1000;
+    draft.pausedRestRemainingMs = null;
     persistDraft();
     clearInterval(restTimerInterval);
     updateRestTimer();
@@ -3251,6 +3550,7 @@
     $("restTimer").classList.remove("active");
     if (!draft) return;
     draft.restUntil = null;
+    draft.pausedRestRemainingMs = null;
     if (save && data.activeWorkout) {
       data.activeWorkout = clone(draft);
       persist();
@@ -3460,6 +3760,9 @@
       notes: "",
       startedAt: null,
       restUntil: null,
+      pausedAt: null,
+      pausedDurationMs: 0,
+      pausedRestRemainingMs: null,
       exercises: template.exercises.map(ex => ({
         id: uid("exercise"),
         name: ex.name,
@@ -3529,6 +3832,7 @@
           </div>
           <button class="icon-btn" data-remove-exercise="${exIndex}" title="${escapeHtml(t("removeExercise"))}">×</button>
         </div>
+        ${renderOverloadCue(exercise)}
         <div class="set-table">
           <div class="th">${escapeHtml(t("set"))}</div><div class="th">${escapeHtml(t("weight"))}</div><div class="th">${escapeHtml(t("reps"))}</div><div class="th">RIR</div><div></div>
           ${exercise.sets.map((set, setIndex) => {
@@ -3626,10 +3930,12 @@
 
     const saved = {
       ...draft,
-      duration: number(draft.duration) || (draft.startedAt ? Math.max(1, Math.round((Date.now() - new Date(draft.startedAt).getTime()) / 60000)) : 0),
+      duration: number(draft.duration) || (draft.startedAt ? Math.max(1, Math.round(workoutElapsedSeconds(draft) / 60)) : 0),
       readiness: number(draft.readiness),
       exercises: validExercises,
       restUntil: null,
+      pausedAt: null,
+      pausedRestRemainingMs: null,
       savedAt: new Date().toISOString()
     };
     data.workouts.push(saved);
@@ -3725,6 +4031,9 @@
       draft.savedAt = undefined;
       draft.startedAt = new Date().toISOString();
       draft.restUntil = null;
+      draft.pausedAt = null;
+      draft.pausedDurationMs = 0;
+      draft.pausedRestRemainingMs = null;
       draft.exercises.forEach(exercise => exercise.sets.forEach(set => {
         set.id = uid("set");
         set.completed = false;
@@ -4035,6 +4344,7 @@
     });
     $("saveWorkoutBtn").onclick = saveWorkout;
     $("resetWorkoutBtn").onclick = resetWorkout;
+    $("workoutPauseBtn").onclick = toggleWorkoutPause;
     $("copyPreviousWorkoutBtn").onclick = copyPreviousWorkout;
     $("restMinusBtn").onclick = () => adjustRestTimer(-30);
     $("restPlusBtn").onclick = () => adjustRestTimer(30);
@@ -4110,7 +4420,7 @@
     clearInterval(restTimerInterval);
     restTimerInterval = null;
     updateRestTimer();
-    if (number(draft.restUntil) > Date.now()) restTimerInterval = setInterval(updateRestTimer, 1000);
+    if (!isWorkoutPaused() && number(draft.restUntil) > Date.now()) restTimerInterval = setInterval(updateRestTimer, 1000);
   }
 
 
