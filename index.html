@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#101214" />
+  <meta name="theme-color" content="#f6f7f8" />
   <meta name="description" content="A private, mobile-friendly gym progress tracker." />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
@@ -255,6 +255,432 @@
       .nav { bottom: 8px; }
       .nav button { font-size: .66rem; }
     }
+
+    /* Mobile-first interface refresh inspired by modern fitness apps. */
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f8;
+      --panel: #ffffff;
+      --panel-2: #f0f2f3;
+      --border: #e6e8ea;
+      --text: #151918;
+      --muted: #8b9298;
+      --accent: #22c943;
+      --accent-2: #151918;
+      --danger: #e5484d;
+      --warning: #f4a340;
+      --success: #169c35;
+      --shadow: 0 14px 40px rgba(22, 28, 26, .07);
+      --radius: 24px;
+    }
+    html { background: var(--bg); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      letter-spacing: -.01em;
+    }
+    .app-shell {
+      width: min(900px, 100%);
+      padding: calc(16px + env(safe-area-inset-top)) 18px calc(132px + env(safe-area-inset-bottom));
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      margin: -8px -6px 20px;
+      padding: 10px 6px 12px;
+      background: rgba(246, 247, 248, .88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .topbar-actions { gap: 10px; }
+    .language-select {
+      min-width: 68px;
+      padding: 9px 12px;
+      border: 0;
+      background: #e9ebed;
+      color: var(--text);
+      box-shadow: none;
+    }
+    .brand { gap: 11px; }
+    .logo {
+      position: relative;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      color: #fff;
+      background: #171b1a;
+      box-shadow: none;
+    }
+    .logo::after {
+      content: "";
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      right: -2px;
+      top: -2px;
+      border: 3px solid var(--bg);
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .brand h1 { font-size: 1.2rem; font-weight: 900; }
+    .brand p { color: var(--muted); font-size: .76rem; }
+    .pill {
+      border: 0;
+      background: #e9ebed;
+      color: #6f767b;
+      padding: 9px 12px;
+      font-weight: 650;
+    }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 14px;
+      padding: 26px;
+      border: 0;
+      border-radius: 30px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(34,201,67,.27), transparent 32%),
+        linear-gradient(145deg, #171b1a, #282e2c);
+      box-shadow: 0 18px 38px rgba(20, 25, 23, .16);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      right: -82px;
+      bottom: -105px;
+      border: 28px solid rgba(255,255,255,.055);
+      border-radius: 50%;
+    }
+    .hero-grid { position: relative; z-index: 1; gap: 22px; }
+    .eyebrow {
+      color: #8ee99d;
+      font-size: .72rem;
+      letter-spacing: .1em;
+    }
+    .hero h2 {
+      max-width: 16ch;
+      margin: 10px 0;
+      font-size: clamp(1.9rem, 5vw, 2.8rem);
+      line-height: 1.01;
+    }
+    .hero p { color: #bbc2bf; line-height: 1.48; }
+    .btn {
+      min-height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: var(--panel-2);
+      color: var(--text);
+      font-weight: 800;
+      box-shadow: none;
+    }
+    .btn:hover { border-color: #cdd1d4; }
+    .btn-primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #0b260f;
+    }
+    .btn-danger {
+      border-color: #f3c9ca;
+      background: #fff0f0;
+      color: #ba252a;
+    }
+    .btn-ghost { background: transparent; }
+    .btn-small { min-height: 38px; padding: 8px 12px; }
+    .grid { gap: 12px; }
+    .metric-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .metric-grid .card {
+      grid-column: auto;
+      min-width: 0;
+      padding: 17px 16px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .card h3 { font-size: 1.02rem; }
+    .metric {
+      color: var(--text);
+      font-size: 1.85rem;
+      font-weight: 950;
+    }
+    .metric-label {
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 650;
+    }
+    .metric-change {
+      color: var(--success);
+      font-weight: 700;
+    }
+    .section-head { margin: 28px 2px 12px; }
+    .section-head h2 {
+      font-size: 1.28rem;
+      font-weight: 900;
+      letter-spacing: -.035em;
+    }
+    .section-head p { margin-top: 4px; font-size: .8rem; }
+    .list { gap: 9px; }
+    .list-item {
+      min-height: 64px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: 0 6px 20px rgba(22, 28, 26, .035);
+    }
+    .list-item strong { font-size: .94rem; }
+    .list-item small { color: var(--muted); }
+    .tag {
+      background: #e9f9ec;
+      color: #168c30;
+      font-weight: 850;
+    }
+    .empty {
+      border-color: #d9dcdf;
+      background: rgba(255,255,255,.55);
+    }
+    label { color: #70777d; font-size: .76rem; font-weight: 700; }
+    input, select, textarea {
+      border: 1px solid transparent;
+      border-radius: 15px;
+      background: #f1f3f4;
+      color: var(--text);
+      min-height: 46px;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #8f969b;
+      box-shadow: 0 0 0 3px rgba(21,25,24,.08);
+    }
+    textarea { min-height: 96px; }
+    .exercise-card {
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .exercise-head h3 { font-size: 1rem; }
+    .set-table .th { color: var(--muted); font-weight: 750; }
+    .set-table input { background: #f2f4f5; }
+    .set-num {
+      background: #171b1a;
+      color: #fff;
+    }
+    .icon-btn {
+      border-color: var(--border);
+      background: #f4f5f6;
+      color: #747b80;
+    }
+    .workout-actions {
+      bottom: calc(94px + env(safe-area-inset-bottom));
+      border-color: var(--border);
+      border-radius: 19px;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 12px 30px rgba(20,25,23,.12);
+    }
+    .chart-wrap {
+      border-color: var(--border);
+      border-radius: 19px;
+      background: #fff;
+    }
+    .history-session:hover { border-color: #cfd3d5; }
+    .session-details { border-top-color: var(--border); }
+    .mini-table td { border-bottom-color: #eceef0; }
+    .notice {
+      border-color: #cdeed4;
+      background: #effbf1;
+      color: #2f673b;
+    }
+    .plan-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+    .plan-stat {
+      border: 0;
+      border-radius: 18px;
+      background: #f2f4f5;
+    }
+    .plan-stat small { color: var(--muted); font-weight: 700; }
+    .plan-stat strong { color: var(--text); }
+    .rule-grid { gap: 8px; }
+    .rule-item {
+      border-color: var(--border);
+      border-radius: 15px;
+      background: #fafbfb;
+      color: #6f767b;
+    }
+    .pr-value small { color: var(--muted); }
+    .toast {
+      top: calc(14px + env(safe-area-inset-top));
+      background: #171b1a;
+      color: #fff;
+      box-shadow: 0 12px 32px rgba(0,0,0,.2);
+    }
+    .modal { background: rgba(20,24,23,.48); }
+    .modal-panel {
+      border-color: var(--border);
+      background: #fff;
+      box-shadow: 0 24px 70px rgba(16,21,19,.22);
+    }
+    hr { border-top-color: var(--border); }
+    .activity-card { padding: 18px; }
+    .activity-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .activity-kicker {
+      display: block;
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 700;
+    }
+    .activity-title-row strong { font-size: 1rem; text-transform: capitalize; }
+    .calendar-weekdays,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .calendar-weekdays {
+      margin-bottom: 8px;
+      color: #a2a8ad;
+      font-size: .68rem;
+      font-weight: 750;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .calendar-day {
+      display: grid;
+      place-items: center;
+      min-height: 44px;
+      aspect-ratio: 1;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+      color: #81888d;
+      font-size: .78rem;
+      font-weight: 750;
+    }
+    .calendar-day.blank { visibility: hidden; }
+    .calendar-day.completed {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #08250d;
+      box-shadow: 0 7px 16px rgba(34,201,67,.18);
+    }
+    .calendar-day.today {
+      border-color: #171b1a;
+      box-shadow: inset 0 0 0 1px #171b1a;
+    }
+    .calendar-day.completed.today {
+      box-shadow: inset 0 0 0 2px #fff, 0 7px 16px rgba(34,201,67,.18);
+    }
+    .nav {
+      bottom: 0;
+      width: min(720px, 100%);
+      gap: 2px;
+      padding: 9px 10px calc(8px + env(safe-area-inset-bottom));
+      border: 0;
+      border-top: 1px solid rgba(225,228,230,.9);
+      border-radius: 26px 26px 0 0;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 -10px 32px rgba(23,29,27,.08);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+    .nav button {
+      gap: 3px;
+      padding: 3px 2px 2px;
+      border-radius: 16px;
+      color: #a2a9b1;
+      font-size: .68rem;
+      font-weight: 750;
+    }
+    .nav button.active { background: transparent; color: #171b1a; }
+    .nav .icon {
+      width: 42px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      font-size: 0;
+    }
+    .nav button.active .icon {
+      background: #171b1a;
+      color: #fff;
+    }
+    .nav svg { width: 21px; height: 21px; }
+    @media (min-width: 760px) {
+      .nav {
+        bottom: 18px;
+        border: 1px solid var(--border);
+        border-radius: 26px;
+      }
+      .app-shell { padding-bottom: 132px; }
+    }
+    @media (max-width: 720px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-actions { justify-content: stretch; }
+      .hero-actions .btn { width: 100%; }
+      .grid:not(.metric-grid) .card,
+      .card.wide { grid-column: 1 / -1; }
+      .metric-grid .card { grid-column: auto; }
+      .form-grid { grid-template-columns: 1fr; }
+      .plan-grid {
+        grid-template-columns: repeat(3, minmax(145px, 1fr));
+        overflow-x: auto;
+        padding-bottom: 3px;
+        scroll-snap-type: x proximity;
+      }
+      .plan-stat { scroll-snap-align: start; }
+      .rule-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .app-shell { padding-left: 14px; padding-right: 14px; }
+      .topbar { margin-left: -2px; margin-right: -2px; }
+      .topbar .pill { display: none; }
+      .brand p { display: none; }
+      .hero { padding: 22px; border-radius: 27px; }
+      .hero h2 { font-size: 2rem; }
+      .metric-grid { gap: 7px; }
+      .metric-grid .card {
+        padding: 14px 10px;
+        border-radius: 19px;
+        box-shadow: none;
+      }
+      .metric-grid .metric { font-size: 1.35rem; }
+      .metric-grid .metric-label { font-size: .66rem; line-height: 1.25; }
+      .metric-grid .metric-change { display: none; }
+      .section-head { margin-top: 25px; }
+      .activity-card { padding: 16px 12px; }
+      .calendar-weekdays,
+      .calendar-grid { gap: 5px; }
+      .calendar-day { min-height: 38px; border-radius: 12px; }
+      .set-table { grid-template-columns: 33px 1fr 1fr 1fr 32px; gap: 4px; }
+      .set-table input { min-height: 42px; padding: 8px 4px; font-size: .78rem; }
+      .set-num { width: 31px; height: 31px; }
+      .exercise-card { padding: 13px 11px; }
+      .modal { place-items: end center; padding: 0; }
+      .modal-panel {
+        width: 100%;
+        max-height: 90vh;
+        border-radius: 28px 28px 0 0;
+        padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+      }
+      .nav { border-radius: 22px 22px 0 0; }
+      .nav button { font-size: .63rem; }
+      .nav .icon { width: 38px; height: 38px; }
+    }
   </style>
 </head>
 <body>
@@ -292,7 +718,7 @@
         </div>
       </div>
 
-      <div class="grid">
+      <div class="grid metric-grid">
         <article class="card">
           <div class="metric" id="weekSessions">0</div>
           <div class="metric-label" data-i18n="sessionsWeek">Sessions this week</div>
@@ -308,6 +734,21 @@
           <div class="metric-label" data-i18n="trackedRecords">Tracked personal records</div>
           <div class="metric-change" data-i18n="importedBests">Imported references + logged bests</div>
         </article>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="activity">Activity</h2>
+          <p data-i18n="activityDesc">Completed workout days this month</p>
+        </div>
+      </div>
+      <div class="card full activity-card">
+        <div class="activity-title-row">
+          <div><span class="activity-kicker" data-i18n="monthOverview">Month overview</span></div>
+          <strong id="activityMonth"></strong>
+        </div>
+        <div id="calendarWeekdays" class="calendar-weekdays"></div>
+        <div id="activityCalendar" class="calendar-grid"></div>
       </div>
 
       <div class="section-head">
@@ -443,11 +884,11 @@
   </main>
 
   <nav class="nav" data-i18n-aria-label="primaryNavigation" aria-label="Primary navigation">
-    <button class="active" data-view="dashboardView"><span class="icon">⌂</span><span data-i18n="home">Home</span></button>
-    <button data-view="logView"><span class="icon">＋</span><span data-i18n="log">Log</span></button>
-    <button data-view="historyView"><span class="icon">◷</span><span data-i18n="history">History</span></button>
-    <button data-view="progressView"><span class="icon">↗</span><span data-i18n="progress">Progress</span></button>
-    <button data-view="settingsView"><span class="icon">⚙</span><span data-i18n="settings">Settings</span></button>
+    <button class="active" data-view="dashboardView"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5H15v-6H9v6H3.5a.5.5 0 0 1-.5-.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span data-i18n="home">Home</span></button>
+    <button data-view="logView"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v10M7 12h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span data-i18n="log">Log</span></button>
+    <button data-view="historyView"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 3v4M17 3v4M3 10h18M8 14h2M14 14h2M8 18h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span data-i18n="history">History</span></button>
+    <button data-view="progressView"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V12M12 20V5M19 20V9" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span data-i18n="progress">Progress</span></button>
+    <button data-view="settingsView"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.86 2.86-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1V21H9.55v-.09A1.7 1.7 0 0 0 8.5 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.86-2.86.06-.06A1.7 1.7 0 0 0 4.1 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1-.4H2.4V9.55h.09A1.7 1.7 0 0 0 4.1 8.5a1.7 1.7 0 0 0-.34-1.88l-.06-.06L6.56 3.7l.06.06A1.7 1.7 0 0 0 8.5 4.1a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1V2.4h4.05v.09A1.7 1.7 0 0 0 15 4.1a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.86 2.86-.06.06A1.7 1.7 0 0 0 19.4 8.5c.14.4.35.75.6 1 .3.27.65.4 1 .4h.09v4.05H21a1.7 1.7 0 0 0-1.6 1.05z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span data-i18n="settings">Settings</span></button>
   </nav>
 
   <div id="exerciseModal" class="modal" role="dialog" aria-modal="true">
@@ -1325,6 +1766,18 @@
     "importedBests": [
       "Imported references + logged bests",
       "Импортированные ориентиры + лучшие результаты"
+    ],
+    "activity": [
+      "Activity",
+      "Активность"
+    ],
+    "activityDesc": [
+      "Completed workout days this month",
+      "Дни тренировок в этом месяце"
+    ],
+    "monthOverview": [
+      "Month overview",
+      "Обзор месяца"
     ],
     "currentBlock": [
       "Current training block",
@@ -2224,6 +2677,7 @@
     const prs = calculatePRs();
     const trackedPRs = new Set([...Object.keys(prs), ...data.referencePRs.map(pr => pr.name)]);
     $("totalPRs").textContent = trackedPRs.size;
+    renderActivityCalendar();
     renderTrainingPlan();
 
     $("splitList").innerHTML = data.templates.map(template => `
@@ -2256,6 +2710,34 @@
     $$("[data-start-template]").forEach(btn => {
       btn.onclick = () => beginWorkout(btn.dataset.startTemplate);
     });
+  }
+
+  function renderActivityCalendar() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const monthStart = new Date(year, month, 1);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const leadingBlanks = (monthStart.getDay() + 6) % 7;
+    const completedDates = new Set(data.workouts.map(workout => workout.date));
+    const formatter = new Intl.DateTimeFormat(getLocale(), { month:"long", year:"numeric" });
+    $("activityMonth").textContent = formatter.format(monthStart);
+
+    $("calendarWeekdays").innerHTML = Array.from({length:7}, (_, index) => {
+      const date = new Date(2024, 0, 1 + index);
+      const label = new Intl.DateTimeFormat(getLocale(), { weekday:"short" }).format(date);
+      return `<span>${escapeHtml(label)}</span>`;
+    }).join("");
+
+    const cells = Array.from({length:leadingBlanks}, () => '<span class="calendar-day blank"></span>');
+    for (let day = 1; day <= daysInMonth; day++) {
+      const value = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      const classes = ["calendar-day"];
+      if (completedDates.has(value)) classes.push("completed");
+      if (day === now.getDate()) classes.push("today");
+      cells.push(`<span class="${classes.join(" ")}" title="${escapeHtml(formatDate(value))}">${day}</span>`);
+    }
+    $("activityCalendar").innerHTML = cells.join("");
   }
 
   function planDate(value) {
@@ -2608,7 +3090,7 @@
     ctx.scale(ratio, ratio);
     ctx.clearRect(0,0,cssWidth,cssHeight);
 
-    const bg = "#101316", grid = "#2a3035", text = "#9ca7ad", line = "#b7f34a", point = "#f4f7f8";
+    const bg = "#ffffff", grid = "#e7e9eb", text = "#8b9298", line = "#22c943", point = "#151918";
     ctx.fillStyle = bg; ctx.fillRect(0,0,cssWidth,cssHeight);
 
     if (!entries.length) {
@@ -2855,4 +3337,3 @@
 </script>
 </body>
 </html>
-

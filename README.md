@@ -4,6 +4,8 @@ A mobile-friendly gym progress tracker built as a private Progressive Web App.
 
 ## Included
 
+- Clean mobile-first interface with light cards, a focused next-workout action, and app-style bottom navigation
+- Monthly activity calendar that highlights completed workout days
 - English and Russian interface with an instant language switch in the header and a saved preference in Settings
 - Localized routines, muscle groups, exercise names, PR notes, dates, guidance, confirmations, and status messages
 - Stable canonical exercise keys so changing language does not break workout history or PR calculations
@@ -54,4 +56,3 @@ Then open `http://localhost:8000`.
 ## Privacy
 
 Workout data is stored in the browser on the current device. Use **Settings → Export data** before changing phones, browsers, or clearing website data.
-
