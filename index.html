@@ -3,11 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f6f7f8" />
+  <meta id="themeColor" name="theme-color" content="#f6f7f8" />
   <meta name="description" content="A private, mobile-friendly gym progress tracker." />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <title>RepTrack</title>
+  <script>
+    try {
+      const savedTheme = JSON.parse(localStorage.getItem("reptrack-data-v1"))?.settings?.theme;
+      const initialTheme = savedTheme === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = initialTheme;
+      document.getElementById("themeColor").setAttribute("content", initialTheme === "dark" ? "#0f1211" : "#f6f7f8");
+    } catch {
+      document.documentElement.dataset.theme = "light";
+    }
+  </script>
   <style>
     :root {
       --bg: #0d0f11;
@@ -302,6 +312,20 @@
       color: var(--text);
       box-shadow: none;
     }
+    .theme-toggle {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      padding: 0;
+      border: 0;
+      border-radius: 14px;
+      background: #e9ebed;
+      color: var(--text);
+    }
+    .theme-toggle svg { width: 20px; height: 20px; }
+    .theme-toggle .sun-icon { display: none; }
     .brand { gap: 11px; }
     .logo {
       position: relative;
@@ -620,6 +644,160 @@
       color: #fff;
     }
     .nav svg { width: 21px; height: 21px; }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0f1211;
+      --panel: #191d1b;
+      --panel-2: #242927;
+      --border: #2d3330;
+      --text: #f5f7f6;
+      --muted: #969e9a;
+      --accent: #54dc6e;
+      --accent-2: #f5f7f6;
+      --danger: #ff7377;
+      --success: #6ce381;
+      --shadow: 0 16px 40px rgba(0,0,0,.22);
+    }
+    html[data-theme="dark"],
+    html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+    html[data-theme="dark"] .topbar {
+      background: rgba(15,18,17,.88);
+    }
+    html[data-theme="dark"] .language-select,
+    html[data-theme="dark"] .theme-toggle,
+    html[data-theme="dark"] .pill {
+      background: #242927;
+      color: #d7ddda;
+    }
+    html[data-theme="dark"] .logo {
+      background: #f4f6f5;
+      color: #111513;
+    }
+    html[data-theme="dark"] .hero {
+      border: 1px solid #323936;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(84,220,110,.25), transparent 32%),
+        linear-gradient(145deg, #171b1a, #252b28);
+      box-shadow: 0 20px 42px rgba(0,0,0,.32);
+    }
+    html[data-theme="dark"] .card,
+    html[data-theme="dark"] .list-item,
+    html[data-theme="dark"] .exercise-card {
+      border-color: var(--border);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    html[data-theme="dark"] .metric,
+    html[data-theme="dark"] .plan-stat strong {
+      color: var(--text);
+    }
+    html[data-theme="dark"] .btn {
+      border-color: var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+    html[data-theme="dark"] .btn-primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #09250f;
+    }
+    html[data-theme="dark"] .btn-danger {
+      border-color: #613438;
+      background: #3a2023;
+      color: #ffb3b6;
+    }
+    html[data-theme="dark"] .tag {
+      background: #203c27;
+      color: #84eb97;
+    }
+    html[data-theme="dark"] .empty {
+      border-color: #39413d;
+      background: rgba(25,29,27,.6);
+    }
+    html[data-theme="dark"] input,
+    html[data-theme="dark"] select,
+    html[data-theme="dark"] textarea,
+    html[data-theme="dark"] .set-table input {
+      border-color: transparent;
+      background: #242927;
+      color: var(--text);
+    }
+    html[data-theme="dark"] input:focus,
+    html[data-theme="dark"] select:focus,
+    html[data-theme="dark"] textarea:focus {
+      border-color: #77817c;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.08);
+    }
+    html[data-theme="dark"] input[type="date"] { color-scheme: dark; }
+    html[data-theme="dark"] .set-num {
+      background: #f3f5f4;
+      color: #151918;
+    }
+    html[data-theme="dark"] .icon-btn {
+      border-color: var(--border);
+      background: #242927;
+      color: #a9b0ad;
+    }
+    html[data-theme="dark"] .workout-actions {
+      border-color: var(--border);
+      background: rgba(25,29,27,.92);
+      box-shadow: 0 12px 32px rgba(0,0,0,.32);
+    }
+    html[data-theme="dark"] .chart-wrap {
+      border-color: var(--border);
+      background: var(--panel);
+    }
+    html[data-theme="dark"] .mini-table td { border-bottom-color: #2d3330; }
+    html[data-theme="dark"] .notice {
+      border-color: #315a39;
+      background: #1d3522;
+      color: #aee9b8;
+    }
+    html[data-theme="dark"] .plan-stat,
+    html[data-theme="dark"] .rule-item {
+      border-color: var(--border);
+      background: #222725;
+      color: #aab1ae;
+    }
+    html[data-theme="dark"] .modal {
+      background: rgba(0,0,0,.7);
+    }
+    html[data-theme="dark"] .modal-panel {
+      border-color: var(--border);
+      background: var(--panel);
+      box-shadow: 0 26px 72px rgba(0,0,0,.5);
+    }
+    html[data-theme="dark"] hr { border-top-color: var(--border); }
+    html[data-theme="dark"] .calendar-day {
+      border-color: var(--border);
+      background: #202422;
+      color: #a4aba7;
+    }
+    html[data-theme="dark"] .calendar-day.completed {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #09250f;
+    }
+    html[data-theme="dark"] .calendar-day.today {
+      border-color: #f2f5f3;
+      box-shadow: inset 0 0 0 1px #f2f5f3;
+    }
+    html[data-theme="dark"] .calendar-day.completed.today {
+      box-shadow: inset 0 0 0 2px #151918, 0 7px 16px rgba(84,220,110,.2);
+    }
+    html[data-theme="dark"] .nav {
+      border-color: var(--border);
+      background: rgba(25,29,27,.94);
+      box-shadow: 0 -10px 34px rgba(0,0,0,.26);
+    }
+    html[data-theme="dark"] .nav button { color: #818a85; }
+    html[data-theme="dark"] .nav button.active { color: #f5f7f6; }
+    html[data-theme="dark"] .nav button.active .icon {
+      background: #f3f5f4;
+      color: #151918;
+    }
+    html[data-theme="dark"] .theme-toggle .moon-icon { display: none; }
+    html[data-theme="dark"] .theme-toggle .sun-icon { display: block; }
     @media (min-width: 760px) {
       .nav {
         bottom: 18px;
@@ -696,6 +874,10 @@
         </div>
       </div>
       <div class="topbar-actions">
+        <button id="themeToggle" class="theme-toggle" type="button" data-i18n-title="switchToDark" data-i18n-aria-label="switchToDark" title="Switch to dark theme" aria-label="Switch to dark theme">
+          <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.6 8.6 0 0 1 8.8 4a8.7 8.7 0 1 0 11.2 11.2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
         <select id="quickLanguage" class="language-select" data-i18n-aria-label="language">
           <option value="en">EN</option>
           <option value="ru">RU</option>
@@ -860,6 +1042,10 @@
           <div>
             <label for="languageSelect" data-i18n="language">Language</label>
             <select id="languageSelect"><option value="en" data-i18n="english">English</option><option value="ru" data-i18n="russian">Russian</option></select>
+          </div>
+          <div>
+            <label for="themeSelect" data-i18n="theme">Theme</label>
+            <select id="themeSelect"><option value="light" data-i18n="lightTheme">Light</option><option value="dark" data-i18n="darkTheme">Dark</option></select>
           </div>
         </div>
         <div class="spacer"></div>
@@ -1578,7 +1764,7 @@
   ];
   const DEFAULT_DATA = {
     version: DATA_VERSION,
-    settings: { unit: "kg", defaultSets: 3, language: "en" },
+    settings: { unit: "kg", defaultSets: 3, language: "en", theme: "light" },
     trainingPlan: TRAINING_PLAN,
     referencePRs: REFERENCE_PRS,
     templates: [
@@ -1730,6 +1916,30 @@
     "russian": [
       "Russian",
       "Русский"
+    ],
+    "theme": [
+      "Theme",
+      "Тема"
+    ],
+    "lightTheme": [
+      "Light",
+      "Светлая"
+    ],
+    "darkTheme": [
+      "Dark",
+      "Тёмная"
+    ],
+    "switchToDark": [
+      "Switch to dark theme",
+      "Включить тёмную тему"
+    ],
+    "switchToLight": [
+      "Switch to light theme",
+      "Включить светлую тему"
+    ],
+    "themeChanged": [
+      "Theme changed",
+      "Тема изменена"
     ],
     "readyTitle": [
       "Ready to train?",
@@ -2506,6 +2716,7 @@
   const DAY_RU = { Tuesday:"Вторник", Thursday:"Четверг", Saturday:"Суббота" };
 
   function getLanguage() { return data.settings.language === "ru" ? "ru" : "en"; }
+  function getTheme() { return data.settings.theme === "dark" ? "dark" : "light"; }
   function getLocale() { return getLanguage() === "ru" ? "ru-RU" : "en-US"; }
   function t(key, vars = {}) {
     const pair = TEXT[key];
@@ -2562,6 +2773,15 @@
     );
     return match ? match.name : value.trim();
   }
+  function applyTheme() {
+    const theme = getTheme();
+    const toggleKey = theme === "dark" ? "switchToLight" : "switchToDark";
+    document.documentElement.dataset.theme = theme;
+    $("themeSelect").value = theme;
+    $("themeToggle").title = t(toggleKey);
+    $("themeToggle").setAttribute("aria-label", t(toggleKey));
+    $("themeColor").setAttribute("content", theme === "dark" ? "#0f1211" : "#f6f7f8");
+  }
   function applyStaticTranslations() {
     document.documentElement.lang = getLanguage();
     $$("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
@@ -2570,6 +2790,7 @@
     $$("[data-i18n-aria-label]").forEach(el => { el.setAttribute("aria-label", t(el.dataset.i18nAriaLabel)); });
     $("quickLanguage").value = getLanguage();
     $("languageSelect").value = getLanguage();
+    applyTheme();
   }
   function refreshLocalizedUI() {
     applyStaticTranslations();
@@ -2588,6 +2809,14 @@
     persist();
     refreshLocalizedUI();
     toast(t("languageChanged"));
+  }
+  function setTheme(theme) {
+    data.settings.theme = theme === "dark" ? "dark" : "light";
+    persist();
+    applyTheme();
+    drawProgressChart();
+    drawBodyweightChart();
+    toast(t("themeChanged"));
   }
   function loadData() {
     try {
@@ -3090,7 +3319,12 @@
     ctx.scale(ratio, ratio);
     ctx.clearRect(0,0,cssWidth,cssHeight);
 
-    const bg = "#ffffff", grid = "#e7e9eb", text = "#8b9298", line = "#22c943", point = "#151918";
+    const dark = getTheme() === "dark";
+    const bg = dark ? "#191d1b" : "#ffffff";
+    const grid = dark ? "#303633" : "#e7e9eb";
+    const text = dark ? "#969e9a" : "#8b9298";
+    const line = dark ? "#54dc6e" : "#22c943";
+    const point = dark ? "#f5f7f6" : "#151918";
     ctx.fillStyle = bg; ctx.fillRect(0,0,cssWidth,cssHeight);
 
     if (!entries.length) {
@@ -3246,6 +3480,7 @@
     data.settings.unit = $("unitSelect").value;
     data.settings.defaultSets = Math.max(1, number($("defaultSets").value) || 3);
     data.settings.language = $("languageSelect").value === "ru" ? "ru" : "en";
+    data.settings.theme = $("themeSelect").value === "dark" ? "dark" : "light";
     persist();
     refreshLocalizedUI();
     toast(t("preferencesSaved"));
@@ -3254,6 +3489,7 @@
   function wireEvents() {
     $$(".nav button").forEach(btn => btn.onclick = () => navigate(btn.dataset.view));
     $("quickLanguage").onchange = () => setLanguage($("quickLanguage").value);
+    $("themeToggle").onclick = () => setTheme(getTheme() === "dark" ? "light" : "dark");
     $("startTodayBtn").onclick = () => beginWorkout(getTodayTemplate().id);
     $("workoutTemplate").onchange = () => {
       const template = data.templates.find(item => item.id === $("workoutTemplate").value);
@@ -3290,9 +3526,11 @@
     $("clearDataBtn").onclick = () => {
       if (!confirm(t("clearConfirm"))) return;
       const language = getLanguage();
+      const theme = getTheme();
       localStorage.removeItem(STORAGE_KEY);
       data = clone(DEFAULT_DATA);
       data.settings.language = language;
+      data.settings.theme = theme;
       draft = null;
       boot();
       toast(t("allDataCleared"));
@@ -3317,6 +3555,7 @@
     $("defaultSets").value = data.settings.defaultSets;
     $("languageSelect").value = getLanguage();
     $("quickLanguage").value = getLanguage();
+    $("themeSelect").value = getTheme();
     if (!draft) draft = makeDraft(getTodayTemplate());
     syncDraftFields();
     renderExerciseList();
