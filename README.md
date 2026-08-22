@@ -6,7 +6,7 @@ A mobile-friendly gym progress tracker built as a private Progressive Web App.
 
 - Clean mobile-first interface with light cards, a focused next-workout action, and app-style bottom navigation
 - Persistent Light/Dark theme switch in the header and Settings
-- Live workout progress with elapsed time, completed-set checkboxes, and automatic unfinished-session recovery
+- Live workout progress with a persistent pause/resume timer, completed-set checkboxes, and automatic unfinished-session recovery
 - Adjustable 2/3/4-minute rest timer with ±30-second controls and vibration when rest ends
 - Previous set values beside each input plus one-tap copying of the last matching workout
 - Monthly activity calendar that highlights completed workout days
@@ -20,6 +20,7 @@ A mobile-friendly gym progress tracker built as a private Progressive Web App.
 - Imported reference PR library from the 14 July 2026 training notes
 - Hard, Hard PR, Easy, and transition-week calendar through 4 October 2026
 - Personalized progression rules: +2.5 kg upper body and +5 kg lower body after a clean 3 × 12
+- Exercise-by-exercise progressive-overload targets that recommend repeating a load or increasing it after three logged sets of 12
 - Workout logging by set, weight, reps, and RIR
 - Session duration, readiness, and notes
 - Workout history and progress charts
@@ -37,6 +38,8 @@ Use the EN/RU selector in the header for an immediate change, or select the lang
 The imported PR list is reference data, not fabricated workout history. A PR with an explicit rep count can establish an estimated-1RM baseline. Weight-only records appear in the reference library and the heaviest-weight progress view.
 
 Existing browser data is migrated to schema version 3: the weekly split is updated while workout history, bodyweight entries, preferences, and any unfinished workout remain intact.
+
+The live timer excludes paused time, survives closing and reopening the app, and pauses an active rest timer until the workout resumes. Progressive-overload targets use the latest logged working sets; the app asks for technique confirmation rather than claiming it can judge form automatically.
 
 ## Run locally
 
