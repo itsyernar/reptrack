@@ -14,9 +14,9 @@ A mobile-friendly gym progress tracker built as a private Progressive Web App.
 - Localized routines, muscle groups, exercise names, PR notes, dates, guidance, confirmations, and status messages
 - Stable canonical exercise keys so changing language does not break workout history or PR calculations
 - Personalized PPL split:
-  - Tuesday: Push · Chest + Triceps
-  - Thursday: Pull · Back + Biceps + lateral raises
-  - Saturday: Legs + Shoulders + weighted pull-ups
+  - Tuesday: Chest + Triceps
+  - Thursday: Legs + Shoulders, including lateral raises
+  - Saturday: Back + Biceps, including weighted pull-ups
 - Imported reference PR library from the 14 July 2026 training notes
 - Hard, Hard PR, Easy, and transition-week calendar through 4 October 2026
 - Personalized progression rules: +2.5 kg upper body and +5 kg lower body after a clean 3 × 12
@@ -36,7 +36,7 @@ Use the EN/RU selector in the header for an immediate change, or select the lang
 
 The imported PR list is reference data, not fabricated workout history. A PR with an explicit rep count can establish an estimated-1RM baseline. Weight-only records appear in the reference library and the heaviest-weight progress view.
 
-Existing browser data is preserved while the new language preference defaults to English until changed.
+Existing browser data is migrated to schema version 3: the weekly split is updated while workout history, bodyweight entries, preferences, and any unfinished workout remain intact.
 
 ## Run locally
 
