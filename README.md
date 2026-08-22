@@ -5,6 +5,7 @@ A mobile-friendly gym progress tracker built as a private Progressive Web App.
 ## Included
 
 - Clean mobile-first interface with light cards, a focused next-workout action, and app-style bottom navigation
+- Persistent Light/Dark theme switch in the header and Settings
 - Monthly activity calendar that highlights completed workout days
 - English and Russian interface with an instant language switch in the header and a saved preference in Settings
 - Localized routines, muscle groups, exercise names, PR notes, dates, guidance, confirmations, and status messages
