@@ -490,9 +490,123 @@
       background: var(--panel);
       box-shadow: var(--shadow);
     }
+    .live-workout-card {
+      margin-bottom: 12px;
+      padding: 17px 18px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .live-workout-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .live-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .live-label i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(34,201,67,.12);
+    }
+    #workoutProgressLabel { display: block; font-size: 1.04rem; }
+    .live-workout-tools { display: flex; align-items: center; gap: 8px; }
+    .elapsed-time {
+      min-width: 56px;
+      color: var(--muted);
+      font-size: .84rem;
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      text-align: center;
+    }
+    .workout-progress-track {
+      height: 7px;
+      margin-top: 14px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e9ecea;
+    }
+    .workout-progress-track span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .22s ease;
+    }
+    .btn:disabled {
+      cursor: default;
+      opacity: .45;
+      transform: none;
+    }
+    .exercise-card.completed {
+      border-color: rgba(34,201,67,.55);
+      background: linear-gradient(180deg, #fff, #f5fff7);
+    }
     .exercise-head h3 { font-size: 1rem; }
     .set-table .th { color: var(--muted); font-weight: 750; }
     .set-table input { background: #f2f4f5; }
+    .set-cell { display: grid; gap: 3px; min-width: 0; }
+    .previous-value {
+      min-height: 12px;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: .6rem;
+      line-height: 1;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .set-check {
+      position: relative;
+      display: grid;
+      place-items: center;
+      margin: 0;
+    }
+    .set-check input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      min-height: 0;
+      padding: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .set-check span {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #dfe3e0;
+      border-radius: 11px;
+      background: #f2f4f3;
+      color: #7f8782;
+      font-size: .75rem;
+      font-weight: 900;
+      transition: .16s ease;
+    }
+    .set-check input:focus-visible + span {
+      outline: 3px solid rgba(34,201,67,.22);
+      outline-offset: 2px;
+    }
+    .set-check input:checked + span {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #09250f;
+    }
     .set-num {
       background: #171b1a;
       color: #fff;
@@ -509,6 +623,50 @@
       background: rgba(255,255,255,.9);
       box-shadow: 0 12px 30px rgba(20,25,23,.12);
     }
+    .rest-timer {
+      position: fixed;
+      left: 50%;
+      bottom: calc(170px + env(safe-area-inset-bottom));
+      z-index: 19;
+      width: min(430px, calc(100% - 28px));
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 12px 11px 15px;
+      border: 1px solid #303633;
+      border-radius: 20px;
+      background: rgba(23,27,26,.96);
+      color: #fff;
+      box-shadow: 0 18px 46px rgba(0,0,0,.24);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .rest-timer.active { display: flex; animation: enter .18s ease both; }
+    .rest-time-copy small {
+      display: block;
+      margin-bottom: 2px;
+      color: #aab1ae;
+      font-size: .66rem;
+      font-weight: 750;
+    }
+    .rest-time-copy strong {
+      font-size: 1.25rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .rest-actions { display: flex; gap: 6px; }
+    .rest-actions button {
+      min-width: 48px;
+      min-height: 38px;
+      padding: 7px 9px;
+      border: 0;
+      border-radius: 12px;
+      background: #303633;
+      color: #e7ebe9;
+      font-size: .72rem;
+      font-weight: 850;
+    }
+    #restSkipBtn { background: var(--accent); color: #09250f; }
     .chart-wrap {
       border-color: var(--border);
       border-radius: 19px;
@@ -682,10 +840,26 @@
     }
     html[data-theme="dark"] .card,
     html[data-theme="dark"] .list-item,
-    html[data-theme="dark"] .exercise-card {
+    html[data-theme="dark"] .exercise-card,
+    html[data-theme="dark"] .live-workout-card {
       border-color: var(--border);
       background: var(--panel);
       box-shadow: var(--shadow);
+    }
+    html[data-theme="dark"] .workout-progress-track { background: #303633; }
+    html[data-theme="dark"] .exercise-card.completed {
+      border-color: rgba(84,220,110,.5);
+      background: linear-gradient(180deg, #191d1b, #1a2a1e);
+    }
+    html[data-theme="dark"] .set-check span {
+      border-color: #353b38;
+      background: #242927;
+      color: #a5aca8;
+    }
+    html[data-theme="dark"] .set-check input:checked + span {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #09250f;
     }
     html[data-theme="dark"] .metric,
     html[data-theme="dark"] .plan-stat strong {
@@ -844,10 +1018,19 @@
       .calendar-weekdays,
       .calendar-grid { gap: 5px; }
       .calendar-day { min-height: 38px; border-radius: 12px; }
+      .live-workout-card { padding: 15px 13px; }
+      .live-workout-head { align-items: flex-start; }
+      .live-workout-tools { gap: 5px; }
+      .elapsed-time { min-width: 48px; font-size: .76rem; }
+      #copyPreviousWorkoutBtn { padding-left: 9px; padding-right: 9px; font-size: .7rem; }
       .set-table { grid-template-columns: 33px 1fr 1fr 1fr 32px; gap: 4px; }
       .set-table input { min-height: 42px; padding: 8px 4px; font-size: .78rem; }
+      .set-table .set-check input { min-height: 0; padding: 0; }
       .set-num { width: 31px; height: 31px; }
+      .set-check span { width: 31px; height: 31px; border-radius: 10px; }
+      .previous-value { font-size: .54rem; }
       .exercise-card { padding: 13px 11px; }
+      .rest-timer { bottom: calc(166px + env(safe-area-inset-bottom)); }
       .modal { place-items: end center; padding: 0; }
       .modal-panel {
         width: 100%;
@@ -958,6 +1141,19 @@
 
     <section id="logView" class="view">
       <div class="section-head"><div><h2 data-i18n="logWorkout">Log workout</h2><p data-i18n="logDesc">Record working sets, reps, weight, and RIR</p></div></div>
+      <div class="live-workout-card">
+        <div class="live-workout-head">
+          <div>
+            <span class="live-label"><i></i><span data-i18n="liveWorkout">Live workout</span></span>
+            <strong id="workoutProgressLabel">0 of 0 sets</strong>
+          </div>
+          <div class="live-workout-tools">
+            <span id="workoutElapsed" class="elapsed-time">00:00</span>
+            <button class="btn btn-small" id="copyPreviousWorkoutBtn" type="button" data-i18n="copyLastWorkout">Copy last</button>
+          </div>
+        </div>
+        <div class="workout-progress-track"><span id="workoutProgressFill"></span></div>
+      </div>
       <div class="card full">
         <div class="form-grid">
           <div><label for="workoutTemplate" data-i18n="workout">Workout</label><select id="workoutTemplate"></select></div>
@@ -1047,6 +1243,10 @@
             <label for="themeSelect" data-i18n="theme">Theme</label>
             <select id="themeSelect"><option value="light" data-i18n="lightTheme">Light</option><option value="dark" data-i18n="darkTheme">Dark</option></select>
           </div>
+          <div>
+            <label for="restSecondsSelect" data-i18n="restTimerSetting">Rest timer</label>
+            <select id="restSecondsSelect"><option value="120" data-i18n="twoMinutes">2 minutes</option><option value="180" data-i18n="threeMinutes">3 minutes</option><option value="240" data-i18n="fourMinutes">4 minutes</option></select>
+          </div>
         </div>
         <div class="spacer"></div>
         <button class="btn" id="saveSettingsBtn" data-i18n="savePreferences">Save preferences</button>
@@ -1068,6 +1268,15 @@
       <div class="card full"><p class="muted" style="margin:0;line-height:1.6" data-i18n="installBody">The app is a Progressive Web App. It can run like a normal app once uploaded to any HTTPS host such as GitHub Pages, Netlify, or Vercel.</p></div>
     </section>
   </main>
+
+  <aside id="restTimer" class="rest-timer" aria-live="polite" aria-atomic="true">
+    <div class="rest-time-copy"><small data-i18n="restTimer">Rest timer</small><strong id="restTimerValue">03:00</strong></div>
+    <div class="rest-actions">
+      <button id="restMinusBtn" type="button" data-i18n-aria-label="decreaseRest" aria-label="Decrease rest by 30 seconds">−30</button>
+      <button id="restSkipBtn" type="button" data-i18n="skipRest">Skip</button>
+      <button id="restPlusBtn" type="button" data-i18n-aria-label="increaseRest" aria-label="Increase rest by 30 seconds">+30</button>
+    </div>
+  </aside>
 
   <nav class="nav" data-i18n-aria-label="primaryNavigation" aria-label="Primary navigation">
     <button class="active" data-view="dashboardView"><span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5H15v-6H9v6H3.5a.5.5 0 0 1-.5-.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span data-i18n="home">Home</span></button>
@@ -1764,7 +1973,7 @@
   ];
   const DEFAULT_DATA = {
     version: DATA_VERSION,
-    settings: { unit: "kg", defaultSets: 3, language: "en", theme: "light" },
+    settings: { unit: "kg", defaultSets: 3, language: "en", theme: "light", restSeconds: 180 },
     trainingPlan: TRAINING_PLAN,
     referencePRs: REFERENCE_PRS,
     templates: [
@@ -1887,11 +2096,14 @@
       }
     ],
     workouts: [],
-    bodyweight: []
+    bodyweight: [],
+    activeWorkout: null
   };
 
   let data = loadData();
   let draft = null;
+  let elapsedTimer = null;
+  let restTimerInterval = null;
 
   const $ = (id) => document.getElementById(id);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -1940,6 +2152,86 @@
     "themeChanged": [
       "Theme changed",
       "Тема изменена"
+    ],
+    "liveWorkout": [
+      "Live workout",
+      "Тренировка идёт"
+    ],
+    "setsComplete": [
+      "{done} of {total} sets",
+      "{done} из {total} подходов"
+    ],
+    "copyLastWorkout": [
+      "Copy last",
+      "Из прошлой"
+    ],
+    "previousShort": [
+      "Last",
+      "Было"
+    ],
+    "noPreviousWorkout": [
+      "No previous workout found for this routine",
+      "Для этой программы нет прошлой тренировки"
+    ],
+    "copyPreviousConfirm": [
+      "Replace the current set values with your previous workout?",
+      "Заменить текущие значения данными прошлой тренировки?"
+    ],
+    "previousWorkoutCopied": [
+      "Previous workout copied",
+      "Прошлая тренировка скопирована"
+    ],
+    "completeSetAria": [
+      "Mark set {number} complete",
+      "Отметить подход {number} выполненным"
+    ],
+    "resumeWorkout": [
+      "Resume workout",
+      "Продолжить тренировку"
+    ],
+    "resumeWorkoutDesc": [
+      "Continue where you stopped · {done} of {total} sets completed",
+      "Продолжи с места остановки · выполнено {done} из {total} подходов"
+    ],
+    "replaceActiveWorkoutConfirm": [
+      "You have an unfinished workout. Replace it with a new one?",
+      "У тебя есть незавершённая тренировка. Заменить её новой?"
+    ],
+    "restTimerSetting": [
+      "Rest timer",
+      "Таймер отдыха"
+    ],
+    "restTimer": [
+      "Rest timer",
+      "Таймер отдыха"
+    ],
+    "twoMinutes": [
+      "2 minutes",
+      "2 минуты"
+    ],
+    "threeMinutes": [
+      "3 minutes",
+      "3 минуты"
+    ],
+    "fourMinutes": [
+      "4 minutes",
+      "4 минуты"
+    ],
+    "skipRest": [
+      "Skip",
+      "Пропустить"
+    ],
+    "decreaseRest": [
+      "Decrease rest by 30 seconds",
+      "Уменьшить отдых на 30 секунд"
+    ],
+    "increaseRest": [
+      "Increase rest by 30 seconds",
+      "Увеличить отдых на 30 секунд"
+    ],
+    "restFinished": [
+      "Rest finished — next set",
+      "Отдых закончен — следующий подход"
     ],
     "readyTitle": [
       "Ready to train?",
@@ -2803,6 +3095,8 @@
     renderDashboard();
     renderHistory();
     renderProgress();
+    updateWorkoutProgress();
+    updateRestTimer();
   }
   function setLanguage(language) {
     data.settings.language = language === "ru" ? "ru" : "en";
@@ -2832,13 +3126,158 @@
           ? clone(DEFAULT_DATA.templates)
           : (Array.isArray(stored.templates) && stored.templates.length ? stored.templates : clone(DEFAULT_DATA.templates)),
         workouts: Array.isArray(stored.workouts) ? stored.workouts : [],
-        bodyweight: Array.isArray(stored.bodyweight) ? stored.bodyweight : []
+        bodyweight: Array.isArray(stored.bodyweight) ? stored.bodyweight : [],
+        activeWorkout: stored.activeWorkout && Array.isArray(stored.activeWorkout.exercises) ? stored.activeWorkout : null
       };
     } catch {
       return clone(DEFAULT_DATA);
     }
   }
   function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+  function normalizeDraft(saved) {
+    const normalized = clone(saved);
+    normalized.startedAt = normalized.startedAt || new Date().toISOString();
+    normalized.restUntil = number(normalized.restUntil) || null;
+    normalized.exercises = (normalized.exercises || []).map(exercise => ({
+      ...exercise,
+      id:exercise.id || uid("exercise"),
+      sets:(exercise.sets || []).map((set, index) => ({
+        ...set,
+        id:set.id || uid("set"),
+        rir:set.rir ?? (index === 2 ? "1" : "2"),
+        completed:Boolean(set.completed)
+      }))
+    }));
+    return normalized;
+  }
+  function draftSetCounts(target = draft) {
+    const sets = target ? target.exercises.flatMap(exercise => exercise.sets || []) : [];
+    return { total:sets.length, done:sets.filter(set => set.completed).length };
+  }
+  function persistDraft() {
+    if (!draft) return;
+    if (!draft.startedAt) draft.startedAt = new Date().toISOString();
+    data.activeWorkout = clone(draft);
+    persist();
+    updateWorkoutProgress();
+    if (!elapsedTimer) elapsedTimer = setInterval(updateWorkoutProgress, 1000);
+  }
+  function workoutSortKey(workout) {
+    return (workout.date || "") + "|" + (workout.savedAt || "");
+  }
+  function lastWorkoutForDraft(target = draft) {
+    if (!target) return null;
+    return [...data.workouts]
+      .sort((a,b) => workoutSortKey(b).localeCompare(workoutSortKey(a)))
+      .find(workout => workout.templateId === target.templateId || workout.name === target.name) || null;
+  }
+  function previousSetsForExercise(name) {
+    const workout = [...data.workouts]
+      .sort((a,b) => workoutSortKey(b).localeCompare(workoutSortKey(a)))
+      .find(item => item.exercises.some(exercise => exercise.name === name));
+    return workout?.exercises.find(exercise => exercise.name === name)?.sets || [];
+  }
+  function formatTimer(seconds) {
+    const safe = Math.max(0, Math.floor(seconds));
+    const hours = Math.floor(safe / 3600);
+    const minutes = Math.floor((safe % 3600) / 60);
+    const secs = safe % 60;
+    return hours
+      ? `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`
+      : `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  }
+  function updateWorkoutProgress() {
+    if (!draft) return;
+    const { total, done } = draftSetCounts();
+    $("workoutProgressLabel").textContent = t("setsComplete", { done, total });
+    $("workoutProgressFill").style.width = (total ? (done / total) * 100 : 0) + "%";
+    const started = draft.startedAt ? new Date(draft.startedAt).getTime() : 0;
+    $("workoutElapsed").textContent = formatTimer(started ? (Date.now() - started) / 1000 : 0);
+    $("copyPreviousWorkoutBtn").disabled = !lastWorkoutForDraft();
+  }
+  function startElapsedTicker() {
+    clearInterval(elapsedTimer);
+    elapsedTimer = null;
+    updateWorkoutProgress();
+    if (draft?.startedAt) elapsedTimer = setInterval(updateWorkoutProgress, 1000);
+  }
+  function configuredRestSeconds() {
+    const seconds = number(data.settings.restSeconds);
+    return [120,180,240].includes(seconds) ? seconds : 180;
+  }
+  function updateRestTimer() {
+    const container = $("restTimer");
+    const restUntil = number(draft?.restUntil);
+    if (!restUntil) {
+      container.classList.remove("active");
+      clearInterval(restTimerInterval);
+      restTimerInterval = null;
+      return;
+    }
+    const remaining = Math.ceil((restUntil - Date.now()) / 1000);
+    if (remaining <= 0) {
+      draft.restUntil = null;
+      if (data.activeWorkout) {
+        data.activeWorkout = clone(draft);
+        persist();
+      }
+      container.classList.remove("active");
+      clearInterval(restTimerInterval);
+      restTimerInterval = null;
+      if (typeof navigator.vibrate === "function") navigator.vibrate([180,80,180]);
+      toast(t("restFinished"));
+      return;
+    }
+    $("restTimerValue").textContent = formatTimer(remaining);
+    container.classList.add("active");
+  }
+  function startRestTimer(seconds = configuredRestSeconds()) {
+    if (!draft) return;
+    draft.restUntil = Date.now() + Math.max(1, seconds) * 1000;
+    persistDraft();
+    clearInterval(restTimerInterval);
+    updateRestTimer();
+    restTimerInterval = setInterval(updateRestTimer, 1000);
+  }
+  function adjustRestTimer(deltaSeconds) {
+    if (!draft?.restUntil) return startRestTimer(Math.max(30, configuredRestSeconds() + deltaSeconds));
+    draft.restUntil = Math.max(Date.now() + 1000, number(draft.restUntil) + deltaSeconds * 1000);
+    persistDraft();
+    updateRestTimer();
+  }
+  function stopRestTimer(save = true) {
+    clearInterval(restTimerInterval);
+    restTimerInterval = null;
+    $("restTimer").classList.remove("active");
+    if (!draft) return;
+    draft.restUntil = null;
+    if (save && data.activeWorkout) {
+      data.activeWorkout = clone(draft);
+      persist();
+    }
+  }
+  function copyPreviousWorkout() {
+    const previous = lastWorkoutForDraft();
+    if (!previous) return toast(t("noPreviousWorkout"));
+    if (!confirm(t("copyPreviousConfirm"))) return;
+    draft.exercises = draft.exercises.map(exercise => {
+      const previousExercise = previous.exercises.find(item => item.name === exercise.name);
+      if (!previousExercise?.sets?.length) return exercise;
+      return {
+        ...exercise,
+        sets:previousExercise.sets.map((set, index) => ({
+          id:exercise.sets[index]?.id || uid("set"),
+          weight:set.weight,
+          reps:set.reps,
+          rir:set.rir,
+          completed:false
+        }))
+      };
+    });
+    persistDraft();
+    renderExerciseList();
+    toast(t("previousWorkoutCopied"));
+  }
   function toast(message) {
     const el = $("toast");
     el.textContent = message;
@@ -2890,12 +3329,21 @@
 
   function renderDashboard() {
     const today = getTodayTemplate();
+    const hasActiveWorkout = Boolean(data.activeWorkout && draft);
     const formatter = new Intl.DateTimeFormat(getLocale(), { weekday:"long", day:"numeric", month:"long" });
     $("todayLabel").textContent = formatter.format(new Date());
-    $("todayWorkoutTitle").textContent = today ? templateDisplayName(today) : t("readyTitle");
-    $("todayWorkoutText").textContent = today
-      ? t("workoutFocus", { count:exerciseCountLabel(today.exercises.length) })
-      : t("progressionVisible");
+    if (hasActiveWorkout) {
+      const { total, done } = draftSetCounts();
+      $("todayWorkoutTitle").textContent = templateDisplayName(draft);
+      $("todayWorkoutText").textContent = t("resumeWorkoutDesc", { done, total });
+      $("startTodayBtn").textContent = t("resumeWorkout");
+    } else {
+      $("todayWorkoutTitle").textContent = today ? templateDisplayName(today) : t("readyTitle");
+      $("todayWorkoutText").textContent = today
+        ? t("workoutFocus", { count:exerciseCountLabel(today.exercises.length) })
+        : t("progressionVisible");
+      $("startTodayBtn").textContent = t("startWorkout");
+    }
 
     const weekStart = startOfWeek();
     const weekWorkouts = data.workouts.filter(w => new Date(w.date + "T12:00:00") >= weekStart);
@@ -2998,7 +3446,7 @@
   }
 
   function createSet(index) {
-    return { id: uid("set"), weight: "", reps: "", rir: index === 2 ? "1" : "2" };
+    return { id: uid("set"), weight: "", reps: "", rir: index === 2 ? "1" : "2", completed:false };
   }
   function makeDraft(template) {
     const setCount = Math.max(1, number(data.settings.defaultSets) || 3);
@@ -3010,6 +3458,8 @@
       duration: "",
       readiness: "",
       notes: "",
+      startedAt: null,
+      restUntil: null,
       exercises: template.exercises.map(ex => ({
         id: uid("exercise"),
         name: ex.name,
@@ -3019,10 +3469,22 @@
     };
   }
   function beginWorkout(templateId) {
+    if (data.activeWorkout && !confirm(t("replaceActiveWorkoutConfirm"))) {
+      draft = normalizeDraft(data.activeWorkout);
+      syncDraftFields();
+      renderExerciseList();
+      startElapsedTicker();
+      updateRestTimer();
+      return navigate("logView");
+    }
     const template = data.templates.find(t => t.id === templateId) || getTodayTemplate();
     draft = makeDraft(template);
+    draft.startedAt = new Date().toISOString();
+    stopRestTimer(false);
+    persistDraft();
     syncDraftFields();
     renderExerciseList();
+    startElapsedTicker();
     navigate("logView");
   }
   function syncDraftFields() {
@@ -3032,6 +3494,7 @@
     $("workoutDuration").value = draft.duration;
     $("workoutReadiness").value = draft.readiness;
     $("workoutNotes").value = draft.notes;
+    updateWorkoutProgress();
   }
   function renderTemplateOptions() {
     const current = $("workoutTemplate").value;
@@ -3040,10 +3503,25 @@
     ).join("");
     if (data.templates.some(template => template.id === current)) $("workoutTemplate").value = current;
   }
+  function previousSetValue(set, field) {
+    const value = set?.[field];
+    return value !== undefined && value !== null && value !== "" ? t("previousShort") + " " + value : "—";
+  }
+  function setSetCompletion(exIndex, setIndex, completed) {
+    const set = draft?.exercises?.[exIndex]?.sets?.[setIndex];
+    if (!set) return;
+    set.completed = Boolean(completed);
+    persistDraft();
+    if (set.completed) startRestTimer();
+    renderExerciseList();
+  }
   function renderExerciseList() {
     if (!draft) return;
-    $("exerciseList").innerHTML = draft.exercises.map((exercise, exIndex) => `
-      <article class="exercise-card" data-exercise-index="${exIndex}">
+    $("exerciseList").innerHTML = draft.exercises.map((exercise, exIndex) => {
+      const previousSets = previousSetsForExercise(exercise.name);
+      const exerciseComplete = exercise.sets.length > 0 && exercise.sets.every(set => set.completed);
+      return `
+      <article class="exercise-card${exerciseComplete ? " completed" : ""}" data-exercise-index="${exIndex}">
         <div class="exercise-head">
           <div>
             <h3>${escapeHtml(exerciseDisplayName(exercise.name))}</h3>
@@ -3053,29 +3531,43 @@
         </div>
         <div class="set-table">
           <div class="th">${escapeHtml(t("set"))}</div><div class="th">${escapeHtml(t("weight"))}</div><div class="th">${escapeHtml(t("reps"))}</div><div class="th">RIR</div><div></div>
-          ${exercise.sets.map((set, setIndex) => `
-            <div class="set-num">${setIndex + 1}</div>
-            <input type="number" min="0" step="0.5" value="${escapeHtml(set.weight)}" placeholder="${escapeHtml(unitLabel())}" data-field="weight" data-ex="${exIndex}" data-set="${setIndex}">
-            <input type="number" min="0" step="1" value="${escapeHtml(set.reps)}" placeholder="12" data-field="reps" data-ex="${exIndex}" data-set="${setIndex}">
-            <input type="number" min="0" max="10" step="1" value="${escapeHtml(set.rir)}" placeholder="2" data-field="rir" data-ex="${exIndex}" data-set="${setIndex}">
+          ${exercise.sets.map((set, setIndex) => {
+            const previous = previousSets[setIndex];
+            const completeLabel = t("completeSetAria", { number:setIndex + 1 });
+            return `
+            <label class="set-check" title="${escapeHtml(completeLabel)}">
+              <input type="checkbox" data-complete-set="${exIndex}:${setIndex}" aria-label="${escapeHtml(completeLabel)}" ${set.completed ? "checked" : ""}>
+              <span>${set.completed ? "✓" : setIndex + 1}</span>
+            </label>
+            <div class="set-cell"><input type="number" min="0" step="0.5" value="${escapeHtml(set.weight)}" placeholder="${escapeHtml(unitLabel())}" data-field="weight" data-ex="${exIndex}" data-set="${setIndex}"><small class="previous-value">${escapeHtml(previousSetValue(previous, "weight"))}</small></div>
+            <div class="set-cell"><input type="number" min="0" step="1" value="${escapeHtml(set.reps)}" placeholder="12" data-field="reps" data-ex="${exIndex}" data-set="${setIndex}"><small class="previous-value">${escapeHtml(previousSetValue(previous, "reps"))}</small></div>
+            <div class="set-cell"><input type="number" min="0" max="10" step="1" value="${escapeHtml(set.rir)}" placeholder="2" data-field="rir" data-ex="${exIndex}" data-set="${setIndex}"><small class="previous-value">${escapeHtml(previousSetValue(previous, "rir"))}</small></div>
             <button class="icon-btn" data-remove-set="${exIndex}:${setIndex}" title="${escapeHtml(t("removeSet"))}">−</button>
-          `).join("")}
+          `;
+          }).join("")}
         </div>
         <div class="exercise-footer">
           <small class="muted" data-prev-best="${escapeHtml(exercise.name)}">${escapeHtml(previousBestText(exercise.name))}</small>
           <button class="btn btn-small" data-add-set="${exIndex}">${escapeHtml(t("addSet"))}</button>
         </div>
       </article>
-    `).join("");
+    `;
+    }).join("");
 
     $$("[data-field]").forEach(input => {
       input.addEventListener("input", () => {
         draft.exercises[number(input.dataset.ex)].sets[number(input.dataset.set)][input.dataset.field] = input.value;
+        persistDraft();
       });
     });
+    $$("[data-complete-set]").forEach(input => input.addEventListener("change", () => {
+      const [exIndex, setIndex] = input.dataset.completeSet.split(":").map(Number);
+      setSetCompletion(exIndex, setIndex, input.checked);
+    }));
     $$("[data-add-set]").forEach(btn => btn.onclick = () => {
       const exercise = draft.exercises[number(btn.dataset.addSet)];
       exercise.sets.push(createSet(exercise.sets.length));
+      persistDraft();
       renderExerciseList();
     });
     $$("[data-remove-set]").forEach(btn => btn.onclick = () => {
@@ -3083,12 +3575,15 @@
       const sets = draft.exercises[exIndex].sets;
       if (sets.length === 1) return toast(t("atLeastOneSet"));
       sets.splice(setIndex, 1);
+      persistDraft();
       renderExerciseList();
     });
     $$("[data-remove-exercise]").forEach(btn => btn.onclick = () => {
       draft.exercises.splice(number(btn.dataset.removeExercise), 1);
+      persistDraft();
       renderExerciseList();
     });
+    updateWorkoutProgress();
   }
   function referenceLoadText(pr) {
     if (!pr) return "";
@@ -3114,6 +3609,7 @@
     draft.duration = $("workoutDuration").value;
     draft.readiness = $("workoutReadiness").value;
     draft.notes = $("workoutNotes").value.trim();
+    persistDraft();
   }
 
   function saveWorkout() {
@@ -3130,12 +3626,17 @@
 
     const saved = {
       ...draft,
-      duration: number(draft.duration),
+      duration: number(draft.duration) || (draft.startedAt ? Math.max(1, Math.round((Date.now() - new Date(draft.startedAt).getTime()) / 60000)) : 0),
       readiness: number(draft.readiness),
       exercises: validExercises,
+      restUntil: null,
       savedAt: new Date().toISOString()
     };
     data.workouts.push(saved);
+    data.activeWorkout = null;
+    stopRestTimer(false);
+    clearInterval(elapsedTimer);
+    elapsedTimer = null;
     persist();
     toast(t("workoutSaved"));
     draft = makeDraft(data.templates.find(t => t.id === saved.templateId) || getTodayTemplate());
@@ -3149,7 +3650,13 @@
 
   function resetWorkout() {
     const template = data.templates.find(t => t.id === $("workoutTemplate").value) || getTodayTemplate();
+    const wasActive = Boolean(data.activeWorkout);
     draft = makeDraft(template);
+    if (wasActive) {
+      draft.startedAt = new Date().toISOString();
+      persistDraft();
+    }
+    stopRestTimer(wasActive);
     syncDraftFields();
     renderExerciseList();
     toast(t("workoutReset"));
@@ -3210,13 +3717,22 @@
     $$("[data-repeat-session]").forEach(btn => btn.onclick = () => {
       const saved = data.workouts.find(workout => workout.id === btn.dataset.repeatSession);
       if (!saved) return;
+      if (data.activeWorkout && !confirm(t("replaceActiveWorkoutConfirm"))) return navigate("logView");
+      stopRestTimer(false);
       draft = clone(saved);
       draft.id = uid("workout");
       draft.date = todayISO();
       draft.savedAt = undefined;
-      draft.exercises.forEach(exercise => exercise.sets.forEach(set => set.id = uid("set")));
+      draft.startedAt = new Date().toISOString();
+      draft.restUntil = null;
+      draft.exercises.forEach(exercise => exercise.sets.forEach(set => {
+        set.id = uid("set");
+        set.completed = false;
+      }));
+      persistDraft();
       syncDraftFields();
       renderExerciseList();
+      startElapsedTicker();
       navigate("logView");
     });
   }
@@ -3440,6 +3956,7 @@
     });
     $("newExerciseName").value = "";
     closeModal("exerciseModal");
+    persistDraft();
     renderExerciseList();
     toast(t("exerciseAdded"));
   }
@@ -3466,8 +3983,14 @@
         referencePRs:needsUpgrade || !Array.isArray(parsed.referencePRs) ? clone(DEFAULT_DATA.referencePRs) : parsed.referencePRs,
         templates:needsUpgrade ? clone(DEFAULT_DATA.templates) : parsed.templates,
         workouts:parsed.workouts,
-        bodyweight:Array.isArray(parsed.bodyweight)?parsed.bodyweight:[]
+        bodyweight:Array.isArray(parsed.bodyweight)?parsed.bodyweight:[],
+        activeWorkout:parsed.activeWorkout && Array.isArray(parsed.activeWorkout.exercises) ? parsed.activeWorkout : null
       };
+      clearInterval(elapsedTimer);
+      clearInterval(restTimerInterval);
+      elapsedTimer = null;
+      restTimerInterval = null;
+      draft = null;
       persist();
       boot();
       toast(t("backupImported"));
@@ -3481,6 +4004,7 @@
     data.settings.defaultSets = Math.max(1, number($("defaultSets").value) || 3);
     data.settings.language = $("languageSelect").value === "ru" ? "ru" : "en";
     data.settings.theme = $("themeSelect").value === "dark" ? "dark" : "light";
+    data.settings.restSeconds = [120,180,240].includes(number($("restSecondsSelect").value)) ? number($("restSecondsSelect").value) : 180;
     persist();
     refreshLocalizedUI();
     toast(t("preferencesSaved"));
@@ -3490,20 +4014,31 @@
     $$(".nav button").forEach(btn => btn.onclick = () => navigate(btn.dataset.view));
     $("quickLanguage").onchange = () => setLanguage($("quickLanguage").value);
     $("themeToggle").onclick = () => setTheme(getTheme() === "dark" ? "light" : "dark");
-    $("startTodayBtn").onclick = () => beginWorkout(getTodayTemplate().id);
+    $("startTodayBtn").onclick = () => data.activeWorkout ? navigate("logView") : beginWorkout(getTodayTemplate().id);
     $("workoutTemplate").onchange = () => {
       const template = data.templates.find(item => item.id === $("workoutTemplate").value);
       if (!template) return;
+      if (data.activeWorkout && !confirm(t("replaceActiveWorkoutConfirm"))) {
+        $("workoutTemplate").value = draft.templateId;
+        return;
+      }
       const currentDate = $("workoutDate").value || todayISO();
+      stopRestTimer(false);
       draft = makeDraft(template);
       draft.date = currentDate;
-      syncDraftFields(); renderExerciseList();
+      draft.startedAt = new Date().toISOString();
+      persistDraft();
+      syncDraftFields(); renderExerciseList(); startElapsedTicker();
     };
     ["workoutDate","workoutDuration","workoutReadiness","workoutNotes"].forEach(id => {
       $(id).addEventListener("input", updateDraftFromForm);
     });
     $("saveWorkoutBtn").onclick = saveWorkout;
     $("resetWorkoutBtn").onclick = resetWorkout;
+    $("copyPreviousWorkoutBtn").onclick = copyPreviousWorkout;
+    $("restMinusBtn").onclick = () => adjustRestTimer(-30);
+    $("restPlusBtn").onclick = () => adjustRestTimer(30);
+    $("restSkipBtn").onclick = () => stopRestTimer(true);
     $("addExerciseBtn").onclick = () => openModal("exerciseModal");
     $("confirmAddExerciseBtn").onclick = addExercise;
     $("progressExercise").onchange = drawProgressChart;
@@ -3527,6 +4062,9 @@
       if (!confirm(t("clearConfirm"))) return;
       const language = getLanguage();
       const theme = getTheme();
+      stopRestTimer(false);
+      clearInterval(elapsedTimer);
+      elapsedTimer = null;
       localStorage.removeItem(STORAGE_KEY);
       data = clone(DEFAULT_DATA);
       data.settings.language = language;
@@ -3556,13 +4094,23 @@
     $("languageSelect").value = getLanguage();
     $("quickLanguage").value = getLanguage();
     $("themeSelect").value = getTheme();
-    if (!draft) draft = makeDraft(getTodayTemplate());
+    $("restSecondsSelect").value = configuredRestSeconds();
+    if (!draft) draft = data.activeWorkout ? normalizeDraft(data.activeWorkout) : makeDraft(getTodayTemplate());
+    if (data.activeWorkout) {
+      data.activeWorkout = clone(draft);
+      persist();
+    }
     syncDraftFields();
     renderExerciseList();
     renderDashboard();
     renderHistory();
     renderProgressSelectors();
     renderProgress();
+    startElapsedTicker();
+    clearInterval(restTimerInterval);
+    restTimerInterval = null;
+    updateRestTimer();
+    if (number(draft.restUntil) > Date.now()) restTimerInterval = setInterval(updateRestTimer, 1000);
   }
 
 
