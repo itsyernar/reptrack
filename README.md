@@ -21,6 +21,7 @@ A mobile-friendly gym progress tracker built as a private Progressive Web App.
 - Hard, Hard PR, Easy, and transition-week calendar through 4 October 2026
 - Personalized progression rules: +2.5 kg upper body and +5 kg lower body after a clean 3 × 12
 - Exercise-by-exercise progressive-overload targets that recommend repeating a load or increasing it after three logged sets of 12
+- One-tap Overload selector on every Log-page exercise card, with persistent selected state and saved workout-history badges
 - Workout logging by set, weight, reps, and RIR
 - Session duration, readiness, and notes
 - Workout history and progress charts
@@ -39,7 +40,7 @@ The imported PR list is reference data, not fabricated workout history. A PR wit
 
 Existing browser data is migrated to schema version 3: the weekly split is updated while workout history, bodyweight entries, preferences, and any unfinished workout remain intact.
 
-The live timer excludes paused time, survives closing and reopening the app, and pauses an active rest timer until the workout resumes. Progressive-overload targets use the latest logged working sets; the app asks for technique confirmation rather than claiming it can judge form automatically.
+The live timer excludes paused time, survives closing and reopening the app, and pauses an active rest timer until the workout resumes. Progressive-overload targets use the latest logged working sets; the app asks for technique confirmation rather than claiming it can judge form automatically. Selecting **Overload** highlights the exercises you intend to progress without changing any weight entries automatically.
 
 ## Run locally
 

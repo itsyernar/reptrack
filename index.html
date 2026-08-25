@@ -592,10 +592,16 @@
       border: 1px solid #e5e8e6;
       border-radius: 15px;
       background: #f6f8f7;
+      transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
     }
     .progression-cue.increase {
       border-color: #bfe8c7;
       background: #effbf1;
+    }
+    .progression-cue.selected {
+      border-color: #8bd29a;
+      background: linear-gradient(135deg, #eaffee, #f8fff9);
+      box-shadow: inset 3px 0 0 var(--accent);
     }
     .progression-cue-copy { min-width: 0; }
     .progression-cue-label {
@@ -629,6 +635,53 @@
       font-weight: 900;
       white-space: nowrap;
     }
+    .progression-cue-actions {
+      display: grid;
+      flex: 0 0 auto;
+      justify-items: end;
+      gap: 6px;
+    }
+    .overload-toggle {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border: 1px solid #cfd5d1;
+      border-radius: 11px;
+      background: #fff;
+      color: #4e5752;
+      font-size: .72rem;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease, color .16s ease;
+    }
+    .overload-toggle:hover {
+      border-color: #85c993;
+      transform: translateY(-1px);
+    }
+    .overload-toggle:active { transform: translateY(0); }
+    .overload-toggle:focus-visible {
+      outline: 3px solid rgba(34,201,67,.2);
+      outline-offset: 2px;
+    }
+    .overload-toggle[aria-pressed="true"] {
+      border-color: #179f32;
+      background: #22c943;
+      color: #09250f;
+    }
+    .overload-toggle-icon {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: rgba(34,201,67,.12);
+      font-size: .72rem;
+      line-height: 1;
+    }
+    .overload-toggle[aria-pressed="true"] .overload-toggle-icon { background: rgba(9,37,15,.12); }
     .btn:disabled {
       cursor: default;
       opacity: .45;
@@ -637,6 +690,28 @@
     .exercise-card.completed {
       border-color: rgba(34,201,67,.55);
       background: linear-gradient(180deg, #fff, #f5fff7);
+    }
+    .exercise-card.overload-selected {
+      border-color: rgba(34,201,67,.62);
+      box-shadow: 0 10px 28px rgba(34,201,67,.10);
+    }
+    .history-exercise-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .history-overload-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: #e4f9e8;
+      color: #147a29;
+      font-size: .64rem;
+      font-weight: 900;
+      white-space: nowrap;
     }
     .exercise-head h3 { font-size: 1rem; }
     .set-table .th { color: var(--muted); font-weight: 750; }
@@ -944,8 +1019,28 @@
       border-color: #356a41;
       background: #1b3020;
     }
+    html[data-theme="dark"] .progression-cue.selected {
+      border-color: #468c55;
+      background: linear-gradient(135deg, #18351f, #1d2921);
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
     html[data-theme="dark"] .progression-badge {
       background: #285b33;
+      color: #96eaa6;
+    }
+    html[data-theme="dark"] .overload-toggle {
+      border-color: #3a433e;
+      background: #292f2c;
+      color: #d4dbd7;
+    }
+    html[data-theme="dark"] .overload-toggle:hover { border-color: #579864; }
+    html[data-theme="dark"] .overload-toggle[aria-pressed="true"] {
+      border-color: #54dc6e;
+      background: #54dc6e;
+      color: #09250f;
+    }
+    html[data-theme="dark"] .history-overload-badge {
+      background: #244d2d;
       color: #96eaa6;
     }
     html[data-theme="dark"] #workoutPauseBtn[aria-pressed="true"] {
@@ -957,6 +1052,10 @@
     html[data-theme="dark"] .exercise-card.completed {
       border-color: rgba(84,220,110,.5);
       background: linear-gradient(180deg, #191d1b, #1a2a1e);
+    }
+    html[data-theme="dark"] .exercise-card.overload-selected {
+      border-color: rgba(84,220,110,.62);
+      box-shadow: 0 10px 30px rgba(84,220,110,.08);
     }
     html[data-theme="dark"] .set-check span {
       border-color: #353b38;
@@ -1135,6 +1234,8 @@
       .progression-cue { align-items: flex-start; padding: 10px; }
       .progression-cue strong { font-size: .79rem; }
       .progression-cue-detail { font-size: .64rem; }
+      .progression-cue-actions { gap: 5px; }
+      .overload-toggle { min-height: 32px; padding: 6px 8px; font-size: .68rem; }
       .set-table { grid-template-columns: 33px 1fr 1fr 1fr 32px; gap: 4px; }
       .set-table input { min-height: 42px; padding: 8px 4px; font-size: .78rem; }
       .set-table .set-check input { min-height: 0; padding: 0; }
@@ -1271,7 +1372,7 @@
         <span class="overload-icon" aria-hidden="true">↗</span>
         <div>
           <strong data-i18n="progressiveOverload">Progressive overload</strong>
-          <small data-i18n="progressiveOverloadDesc">Each exercise gets a next target from your latest logged working sets.</small>
+          <small data-i18n="progressiveOverloadDesc">Tap Overload on exercises where you feel ready to add weight. Your target is based on your latest working sets.</small>
         </div>
       </div>
       <div class="card full">
@@ -2302,8 +2403,36 @@
       "Прогрессивная нагрузка"
     ],
     "progressiveOverloadDesc": [
-      "Each exercise gets a next target from your latest logged working sets.",
-      "Для каждого упражнения цель рассчитывается по последним записанным рабочим подходам."
+      "Tap Overload on exercises where you feel ready to add weight. Your target is based on your latest working sets.",
+      "Нажми «Повысить» у упражнений, где готов добавить вес. Цель рассчитывается по последним рабочим подходам."
+    ],
+    "overloadAction": [
+      "Overload",
+      "Повысить"
+    ],
+    "overloadSelected": [
+      "Selected",
+      "Выбрано"
+    ],
+    "selectOverloadAria": [
+      "Select {exercise} for an overload attempt",
+      "Выбрать {exercise} для повышения веса"
+    ],
+    "removeOverloadAria": [
+      "Remove overload selection from {exercise}",
+      "Убрать повышение веса для {exercise}"
+    ],
+    "overloadSelectedToast": [
+      "{exercise}: overload selected",
+      "{exercise}: повышение выбрано"
+    ],
+    "overloadRemovedToast": [
+      "{exercise}: overload removed",
+      "{exercise}: повышение отменено"
+    ],
+    "overloadHistory": [
+      "Overload",
+      "Повышение"
     ],
     "nextTarget": [
       "Next target",
@@ -3324,6 +3453,7 @@
     normalized.exercises = (normalized.exercises || []).map(exercise => ({
       ...exercise,
       id:exercise.id || uid("exercise"),
+      overloadSelected:Boolean(exercise.overloadSelected),
       sets:(exercise.sets || []).map((set, index) => ({
         ...set,
         id:set.id || uid("set"),
@@ -3414,16 +3544,26 @@
       badge:""
     };
   }
-  function renderOverloadCue(exercise) {
+  function renderOverloadCue(exercise, exIndex) {
     const recommendation = overloadRecommendation(exercise);
+    const selected = Boolean(exercise.overloadSelected);
+    const exerciseName = exerciseDisplayName(exercise.name);
+    const actionLabel = t(selected ? "overloadSelected" : "overloadAction");
+    const actionTitle = t(selected ? "removeOverloadAria" : "selectOverloadAria", { exercise:exerciseName });
     return `
-      <div class="progression-cue ${recommendation.mode}">
+      <div class="progression-cue ${recommendation.mode}${selected ? " selected" : ""}">
         <div class="progression-cue-copy">
           <span class="progression-cue-label">${escapeHtml(t("nextTarget"))}</span>
           <strong>${escapeHtml(recommendation.title)}</strong>
           <span class="progression-cue-detail">${escapeHtml(recommendation.detail)}</span>
         </div>
-        ${recommendation.badge ? `<span class="progression-badge">${escapeHtml(recommendation.badge)}</span>` : ""}
+        <div class="progression-cue-actions">
+          ${recommendation.badge ? `<span class="progression-badge">${escapeHtml(recommendation.badge)}</span>` : ""}
+          <button class="overload-toggle" type="button" data-toggle-overload="${exIndex}" aria-pressed="${selected}" aria-label="${escapeHtml(actionTitle)}" title="${escapeHtml(actionTitle)}">
+            <span class="overload-toggle-icon" aria-hidden="true">${selected ? "✓" : "↗"}</span>
+            <span>${escapeHtml(actionLabel)}</span>
+          </button>
+        </div>
       </div>
     `;
   }
@@ -3767,6 +3907,7 @@
         id: uid("exercise"),
         name: ex.name,
         category: ex.category,
+        overloadSelected: false,
         sets: Array.from({length:setCount}, (_, i) => createSet(i))
       }))
     };
@@ -3818,13 +3959,23 @@
     if (set.completed) startRestTimer();
     renderExerciseList();
   }
+  function toggleExerciseOverload(exIndex) {
+    const exercise = draft?.exercises?.[exIndex];
+    if (!exercise) return;
+    exercise.overloadSelected = !exercise.overloadSelected;
+    persistDraft();
+    renderExerciseList();
+    toast(t(exercise.overloadSelected ? "overloadSelectedToast" : "overloadRemovedToast", {
+      exercise:exerciseDisplayName(exercise.name)
+    }));
+  }
   function renderExerciseList() {
     if (!draft) return;
     $("exerciseList").innerHTML = draft.exercises.map((exercise, exIndex) => {
       const previousSets = previousSetsForExercise(exercise.name);
       const exerciseComplete = exercise.sets.length > 0 && exercise.sets.every(set => set.completed);
       return `
-      <article class="exercise-card${exerciseComplete ? " completed" : ""}" data-exercise-index="${exIndex}">
+      <article class="exercise-card${exerciseComplete ? " completed" : ""}${exercise.overloadSelected ? " overload-selected" : ""}" data-exercise-index="${exIndex}">
         <div class="exercise-head">
           <div>
             <h3>${escapeHtml(exerciseDisplayName(exercise.name))}</h3>
@@ -3832,7 +3983,7 @@
           </div>
           <button class="icon-btn" data-remove-exercise="${exIndex}" title="${escapeHtml(t("removeExercise"))}">×</button>
         </div>
-        ${renderOverloadCue(exercise)}
+        ${renderOverloadCue(exercise, exIndex)}
         <div class="set-table">
           <div class="th">${escapeHtml(t("set"))}</div><div class="th">${escapeHtml(t("weight"))}</div><div class="th">${escapeHtml(t("reps"))}</div><div class="th">RIR</div><div></div>
           ${exercise.sets.map((set, setIndex) => {
@@ -3868,6 +4019,9 @@
       const [exIndex, setIndex] = input.dataset.completeSet.split(":").map(Number);
       setSetCompletion(exIndex, setIndex, input.checked);
     }));
+    $$("[data-toggle-overload]").forEach(btn => btn.onclick = () => {
+      toggleExerciseOverload(number(btn.dataset.toggleOverload));
+    });
     $$("[data-add-set]").forEach(btn => btn.onclick = () => {
       const exercise = draft.exercises[number(btn.dataset.addSet)];
       exercise.sets.push(createSet(exercise.sets.length));
@@ -3989,10 +4143,13 @@
           <span class="tag">${formatNumber(Math.round(workoutVolume(workout)))} ${escapeHtml(unitLabel())}</span>
         </div>
         <div class="session-details" id="details-${escapeHtml(workout.id)}">
-          ${workout.exercises.map(exercise => `
-            <div style="margin-bottom:12px">
-              <strong style="font-size:.84rem">${escapeHtml(exerciseDisplayName(exercise.name))}</strong>
-              <table class="mini-table">
+         ${workout.exercises.map(exercise => `
+           <div style="margin-bottom:12px">
+              <div class="history-exercise-title">
+                <strong style="font-size:.84rem">${escapeHtml(exerciseDisplayName(exercise.name))}</strong>
+                ${exercise.overloadSelected ? `<span class="history-overload-badge">↗ ${escapeHtml(t("overloadHistory"))}</span>` : ""}
+              </div>
+             <table class="mini-table">
                 ${exercise.sets.map((set,index) => `<tr><td>${escapeHtml(t("set"))} ${index+1}</td><td>${set.weight} ${escapeHtml(unitLabel())} × ${set.reps} · RIR ${set.rir}</td></tr>`).join("")}
               </table>
             </div>
@@ -4038,6 +4195,7 @@
         set.id = uid("set");
         set.completed = false;
       }));
+      draft.exercises.forEach(exercise => { exercise.overloadSelected = false; });
       persistDraft();
       syncDraftFields();
       renderExerciseList();
@@ -4261,6 +4419,7 @@
     const setCount = Math.max(1, number(data.settings.defaultSets) || 3);
     draft.exercises.push({
       id:uid("exercise"), name, category,
+      overloadSelected:false,
       sets:Array.from({length:setCount},(_,index)=>createSet(index))
     });
     $("newExerciseName").value = "";
