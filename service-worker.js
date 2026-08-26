@@ -1,5 +1,15 @@
-const CACHE = "reptrack-v9";
-const ASSETS = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
+const CACHE = "reptrack-v10";
+const ASSETS = [
+  "./",
+  "./index.html",
+  "./simple.css",
+  "./simple-data.js",
+  "./simple-workout.js",
+  "./simple-progress.js",
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png"
+];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
